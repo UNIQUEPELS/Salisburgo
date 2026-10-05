@@ -438,10 +438,12 @@ details.later summary{cursor:pointer;color:var(--muted);font-size:15px;min-heigh
   ];
 
   var RANKS = [
-    { min:0.87, name:"Baronessa von Trapp" },
-    { min:0.65, name:"Governante di prima classe" },
-    { min:0.4, name:"Postulante promettente" },
-    { min:0,  name:"Novizia in prova" }
+    { min:23, name:"Fan interplanetaria" },
+    { min:21, name:"Mega Fan" },
+    { min:19, name:"Super Fan" },
+    { min:15, name:"Fan" },
+    { min:10, name:"Fan in prova" },
+    { min:0,  name:"Fan da allenare" }
   ];
   var justOpened = null;
   var $ = function(id){ return document.getElementById(id); };
@@ -594,9 +596,9 @@ details.later summary{cursor:pointer;color:var(--muted);font-size:15px;min-heigh
   }
 
   function finalHTML(){
-    if (!allOpen()) return lockPage("Prova finale", "Esame da Baronessa", "Si apre quando hai raccolto tutti e sei i timbri.");
+    if (!allOpen()) return lockPage("Prova finale", "Esame da Fan interplanetaria", "Si apre quando hai raccolto tutti e sei i timbri.");
     var answered = FINAL.every(function(f){ return typeof state.fin[f.id] === "number"; });
-    return '<div class="final"><div><div class="mono" style="color:var(--accent)">Prova finale</div><h2>Esame da Baronessa</h2></div>' +
+    return '<div class="final"><div><div class="mono" style="color:var(--accent)">Prova finale</div><h2>Esame da Fan interplanetaria</h2></div>' +
       '<p>Sei timbri raccolti. Ultime cinque domande. Si possono leggere ad alta voce mentre si guida: rispondi tu.</p>' +
       FINAL.map(function(f, fi){ return quizHTML(f.id, f, state.fin[f.id], "Esame finale " + (fi + 1) + " di " + FINAL.length); }).join("") +
       (answered ? '<div class="twist"><div class="mono">Esame finito</div><p>Il diploma ti aspetta nella pagina dopo.</p><button class="btn" type="button" data-go="' + DIPLOMA_AT + '">Vai al diploma</button></div>' : '') +
@@ -607,7 +609,7 @@ details.later summary{cursor:pointer;color:var(--muted);font-size:15px;min-heigh
     var done = allOpen() && FINAL.every(function(f){ return typeof state.fin[f.id] === "number"; });
     if (!done) return lockPage("Diploma", "Non ancora", "Arriva dopo l'esame finale.");
     var sc = score(), total = STAGES.reduce(function(a, s){ return a + s.quizzes.length; }, 0) + FINAL.length;
-    var rank = RANKS.filter(function(r){ return sc / total >= r.min; })[0].name;
+    var rank = RANKS.filter(function(r){ return sc >= r.min; })[0].name;
     return '<div class="diploma"><div class="inner">' +
       '<div class="mono" style="color:var(--stamp)">Salisburgo &middot; Mondsee &middot; 8 e 9 ottobre 2026</div>' +
       '<h2>Diploma</h2>' +
