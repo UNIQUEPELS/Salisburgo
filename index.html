@@ -188,6 +188,9 @@ button,input{font:inherit;color:inherit}
 .btn{min-height:52px;padding:10px 22px;border:0;border-radius:6px;background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:17px;cursor:pointer}
 .btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line);min-height:44px;padding:8px 16px;font-weight:600}
 .btn.foil{background:var(--foil);color:#14304B}
+a.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;text-align:center}
+.clipbox{border:1px solid var(--line);padding:14px 16px;border-radius:6px;display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.clipbox .mono{color:var(--muted)}
 .btn[disabled]{opacity:.4;cursor:default}
 .msg{min-height:1.4em;font-size:15px;color:var(--bad)}
 .shake{animation:shake .4s}
@@ -266,7 +269,7 @@ details.later summary{cursor:pointer;color:var(--muted);font-size:15px;min-heigh
         <li><a href="https://www.irishtimes.com/culture/film/christopher-plummer-never-hid-his-dislike-of-the-sound-of-music-1.4477461" target="_blank" rel="noopener">Irish Times, Plummer e il film</a></li>
         <li><a href="https://www.imdb.com/title/tt0059742/trivia/" target="_blank" rel="noopener">IMDb, trivia scritte dagli utenti</a></li>
         <li><a href="https://the-take.com/read/what-is-the-true-story-behind-athe-sound-of-musicasa-gazebo-scenes" target="_blank" rel="noopener">The Take, la storia del gazebo</a></li>
-        <li><a href="https://en.wikipedia.org/wiki/Sixteen_Going_on_Seventeen" target="_blank" rel="noopener">Wikipedia, Sixteen Going on Seventeen</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Sixteen_Going_on_Seventeen" target="_blank" rel="noopener">Wikipedia, la canzone di Liesl e Rolfe</a></li>
         <li><a href="https://filmsofthefifties.com/charmian-carr/" target="_blank" rel="noopener">Films of the Fifties, Charmian Carr</a></li>
         <li><a href="https://tvovermind.com/the-sound-of-music-10-easter-eggs-and-behind-the-scenes-trivia/" target="_blank" rel="noopener">TVovermind, la vera Maria nel film</a></li>
         <li><a href="https://www.blackcasediaries.com/new-blog/the-case-is-alive-with-the-sound-of-music-part-2-wwz52-f9xkg-zhamd" target="_blank" rel="noopener">The Black Case Diaries, la scena del matrimonio</a></li>
@@ -315,10 +318,11 @@ details.later summary{cursor:pointer;color:var(--muted);font-size:15px;min-heigh
       twist:{ label:"Colpo di scena", text:"I capelli biondi di Maria? Le mesh, all'inizio, vennero arancioni. Per rimediare le tagliarono i capelli corti e li decolorarono del tutto. E il Capitano gir&ograve; quasi tutte le sue scene in circa 11 giorni, mangiando cos&igrave; tante paste che dovettero allargargli il costume." },
       fun:"Il prato dell'inizio sarebbe in Germania, a Mehlweg, appena oltre il confine con l'Austria.",
       challenge:"Appena scendi dall'auto, apri le braccia e gira su te stessa tre volte. Si gira un video. Niente elicotteri.",
+      clip:{ url:"https://youtu.be/FMWeUakyfJA", label:"l'apertura sul prato" },
       quizzes:[
-        { q:"Dove si trova Maria nella scena d'apertura, mentre canta?", opts:["In un prato in alta montagna","Nel giardino dell'abbazia","Sulle rive di un lago"], ok:0, why:"Il film si apre con Maria che gira su se stessa in un prato di montagna, cantando The Sound of Music." },
-        { q:"Che cosa è Maria all'inizio del film?", opts:["Una postulante, aspirante suora","Una governante di professione","Un'insegnante di musica"], ok:0, why:"Vive nell'abbazia di Nonnberg come postulante, e ogni tanto combina guai." },
-        { q:"Dove la manda la Madre Badessa?", opts:["Dal capitano von Trapp, come governante dei suoi figli","In un altro convento, a Vienna","In una scuola di musica"], ok:0, why:"La manda a occuparsi dei sette figli del capitano von Trapp." }
+        { q:"Perché la Madre Superiora manda Maria dal comandante von Trapp?", opts:["Per mettere alla prova la sua vocazione", "Per punirla di una grave mancanza", "Perché lo ha chiesto il comandante", "Perché Maria vuole lasciare l'abbazia"], ok:0, why:"Maria è una novizia vivace e indisciplinata. La Madre Superiora la manda come istitutrice per capire se la vita da suora è davvero la sua strada." },
+        { q:"Quale canzone cantano la Madre Superiora e le suore parlando di Maria?", opts:["Maria", "Il suono della musica", "Cerca il tuo mondo", "Addio, ciao ciao"], ok:0, why:"Si intitola «Maria». Le suore la cantano per parlare di lei e dei guai che combina." },
+        { q:"Che mestiere faceva il comandante von Trapp prima di ritirarsi?", opts:["Ufficiale della marina imperiale austriaca", "Ufficiale di cavalleria dell'esercito", "Pilota dell'aviazione austriaca", "Diplomatico dell'ambasciata a Vienna"], ok:0, why:"Era un ufficiale della marina imperiale austriaca, e in casa chiama i figli con un fischietto, come a bordo di una nave." }
       ],
       src:"Fonti: sound-of-music.com, Reminisce, Yours, WatchMojo, Today."
     },
@@ -334,10 +338,11 @@ details.later summary{cursor:pointer;color:var(--muted);font-size:15px;min-heigh
       twist:{ label:"Colpo di scena", text:"I von Trapp veri erano dieci, non sette. Nel film nomi, et&agrave; e sesso furono cambiati. Quelli veri dei primi sette si chiamavano Rupert, Werner, Johanna, Agathe, Maria, Martina e Hedwig. Gli altri tre nacquero dal matrimonio con Maria." },
       fun:"Il palazzo di Mirabell fu costruito nel 1606 dall'arcivescovo Wolf Dietrich per la sua amante, Salome Alt.",
       challenge:"Foto di voi due che saltate insieme sulle scale, come i bambini. Con prudenza.",
+      clip:{ url:"https://youtu.be/hAVxH-X7bdE", label:"Do-Re-Mi" },
       quizzes:[
-        { q:"Che cosa insegna Maria ai bambini con Do-Re-Mi?", opts:["Le note musicali","Una lingua straniera","Le tabelline"], ok:0, why:"Parte dalle sette note e fa cantare tutti." },
-        { q:"Come chiama i figli il Capitano, all'inizio del film?", opts:["Con un fischietto da nostromo","Con una campanella","Con una tromba"], ok:0, why:"Governa la casa come una nave e li richiama con un fischietto." },
-        { q:"Con che cosa cuce Maria i vestiti da gioco dei bambini?", opts:["Con le vecchie tende della sua camera","Con un lenzuolo","Con una coperta di lana"], ok:0, why:"Trasforma le tende della sua stanza in abiti per giocare all'aperto." }
+        { q:"Che cosa chiede Maria al comandante prima che parta per Vienna?", opts:["Della stoffa resistente per i vestiti da gioco", "Il permesso di portare i ragazzi in gita", "Dei libri di musica per i bambini", "Una chitarra per insegnare le canzoni"], ok:0, why:"Chiede una stoffa robusta per fare vestiti da gioco ai ragazzi e riceve un rifiuto netto." },
+        { q:"Che cosa succede quando il comandante torna e trova i ragazzi con Maria?", opts:["La barca su cui remano si rovescia davanti a lui", "Lo accolgono cantando in coro in giardino", "Maria cade dalla bicicletta nel lago", "I ragazzi si nascondono sugli alberi"], ok:0, why:"I ragazzi sono in barca con Maria e la barca si ribalta proprio davanti al padre, con i vestiti fatti con le tende." },
+        { q:"Che cosa aveva vietato il comandante in casa dopo la morte della moglie?", opts:["La musica e il canto", "Le visite degli amici", "I giochi all'aperto", "Le uscite in città"], ok:0, why:"In casa non si cantava più. Maria riporta la musica, e il comandante cambia idea su di lei." }
       ],
       src:"Fonti: BuzzFeed, The Stranger, National Archives, von Trapp Family Lodge."
     },
@@ -345,19 +350,20 @@ details.later summary{cursor:pointer;color:var(--muted);font-size:15px;min-heigh
       id:"s3", num:3, top:"SALZBURG", code:"RES", date:"8.10.2026", rot:-5,
       kicker:"Tappa 3 &middot; 8 ottobre &middot; centro storico",
       title:"Il film che Salisburgo non guardava",
-      words:["aicudif"],
+      words:["elosliednelps","elosliednelpsinamodad"],
       story:[
         "Mentre cammini in questo centro, ricordati di una cosa: in Austria il film fu un fiasco. All'uscita, nel 1965, non piacque n&eacute; qui n&eacute; in Germania, e ancora oggi molti austriaci non l'hanno mai visto.",
         "Un autore austriaco racconta che diversi attori emigrati a Hollywood, fuggiti dai nazisti, protestarono contro il ritratto troppo indulgente dei loro ex connazionali, e che per questo lo studio ritir&ograve; il film dai cinema europei. &Egrave; la sua versione, non confermata da altre fonti.",
-        "In I Have Confidence, quando Maria corre in un cortile verso la casa dei von Trapp, inciampa. Secondo le trivia di IMDb, scritte dagli utenti, fu un incidente vero."
+        "In «Da domani splende il sole», quando Maria corre in un cortile verso la casa dei von Trapp, inciampa. Secondo le trivia di IMDb, scritte dagli utenti, fu un incidente vero."
       ],
       twist:{ label:"Colpo di scena", text:"Lo storico Doron Rabinovici osserva, con ironia, che gli austriaci forse notarono una cosa: i nazisti del film sono austriaci." },
       fun:"A pochi passi da qui, in Getreidegasse 9, c'&egrave; la casa natale di Mozart.",
       challenge:"Attraversa la piazza con passo deciso, come una governante in missione. Ti fotografano da dietro.",
+      clips:[ { url:"https://www.youtube.com/watch?v=JJYz8pyXOG4", label:"la scena (in inglese)" }, { url:"https://www.youtube.com/watch?v=gnqeF1Zjnf4", label:"la canzone in italiano (solo audio)" } ],
       quizzes:[
-        { q:"Quale canzone canta Maria, andando verso la casa dei von Trapp, per darsi coraggio?", opts:["I Have Confidence","Edelweiss","The Lonely Goatherd"], ok:0, why:"È I Have Confidence, cantata mentre attraversa la città." },
-        { q:"Quando i bambini hanno paura durante il temporale, che cosa fa Maria?", opts:["Canta My Favorite Things","Li manda a dormire","Chiama il Capitano"], ok:0, why:"Li tranquillizza cantando My Favorite Things, e presto cantano tutti insieme." },
-        { q:"Quanti sono i figli del Capitano, nel film?", opts:["Sette","Cinque","Dieci"], ok:0, why:"Sette, da Liesl, la maggiore, fino a Gretl, la più piccola." }
+        { q:"Quale canzone canta Maria da sola, per farsi coraggio, all'inizio della sua nuova avventura?", opts:["Da domani splende il sole", "Le cose che piacciono a me", "Cerca il tuo mondo", "Il suono della musica"], ok:0, why:"È «Da domani splende il sole»: Maria la canta da sola mentre si avvia verso la villa." },
+        { q:"Quale canzone canta Maria per rassicurare i bambini durante il temporale?", opts:["Le cose che piacciono a me", "Addio, ciao ciao", "Il pastore che pascolava", "Do-Re-Mi"], ok:0, why:"Durante il temporale i più piccoli corrono nella sua camera: lei insegna loro a pensare alle cose belle." },
+        { q:"Che cosa rivelano i bambini sul loro comportamento sbagliato?", opts:["Cercavano di attirare l'attenzione del padre", "Erano gelosi della baronessa Schraeder", "Volevano imitare i ragazzi del paese", "Non sopportavano la musica"], ok:0, why:"Dietro i dispetti c'era il desiderio di essere notati dal padre." }
       ],
       src:"Fonti: Culture Trip, The Stranger, Engelsberg Ideas, Freud's Butcher (cita Rabinovici), IMDb (trivia degli utenti)."
     },
@@ -373,10 +379,11 @@ details.later summary{cursor:pointer;color:var(--muted);font-size:15px;min-heigh
       twist:{ label:"Colpo di scena", text:"Plummer chiamava il film The Sound of Mucus, il suono del muco: lo trovava troppo sdolcinato. Rimase comunque amico di Julie Andrews per tutta la vita, e lei sostiene che il suo cinismo abbia salvato il film dal diventare stucchevole. Il nipote del vero Georg, interrogato da Plummer, lo descrisse come l'uomo pi&ugrave; noioso che avesse mai incontrato." },
       fun:"La fortezza di Hohensalzburg, che vedi illuminata, risalirebbe al 1077 ed &egrave; tra i castelli medievali pi&ugrave; grandi d'Europa.",
       challenge:"Foto di profilo davanti alla fortezza che si illumina. Poi si canta una strofa a bassa voce. Nessun doppiaggio.",
+      clip:{ url:"https://youtu.be/8bL2BCiFkTk", label:"Edelweiss" },
       quizzes:[
-        { q:"Che cosa rappresenta Edelweiss quando il Capitano la canta al concerto?", opts:["Un addio alla sua patria","Una sfida alla baronessa","Una ninna nanna per Gretl"], ok:0, why:"Canta il suo amore per l'Austria poco prima di fuggire, e la sala si unisce a lui." },
-        { q:"Con quale strumento si accompagna il Capitano mentre canta Edelweiss?", opts:["La chitarra","Il violino","Il pianoforte"], ok:0, why:"Si accompagna con la chitarra." },
-        { q:"Dove si esibisce la famiglia, in quella scena?", opts:["Al Festival di Salisburgo","Alla Scala di Milano","In una chiesa di Vienna"], ok:0, why:"Il concerto è il Festival di Salisburgo, ed è l'occasione per la fuga." }
+        { q:"Con quale dei ragazzi sta ballando Maria sulla terrazza quando interviene il comandante?", opts:["Kurt", "Friedrich", "Louisa", "Brigitta"], ok:0, why:"Maria sta insegnando il ländler a Kurt, poi il comandante prende il suo posto." },
+        { q:"Dove balla il comandante il ländler con Maria?", opts:["Sulla terrazza della villa", "Nel grande salone da ballo", "Nel giardino vicino al lago", "Nella sala da pranzo"], ok:0, why:"Gli ospiti ballano il valzer nel salone, mentre Maria e i bambini guardano la festa dalla terrazza. È lì che il comandante la invita a ballare." },
+        { q:"Che cosa dice il comandante a Zeller e ai suoi uomini la sera in cui tenta la fuga?", opts:["Che stanno andando a cantare al festival di Salisburgo", "Che portano i bambini a messa all'abbazia", "Che vanno a trovare degli amici a Vienna", "Che stanno cercando un bambino smarrito"], ok:0, why:"Per coprire la fuga dice che la famiglia sta andando al festival, dove canterà." }
       ],
       src:"Fonti: Culture Trip, NPR, Irish Times, IMDb (trivia degli utenti), Grunge."
     },
@@ -392,10 +399,11 @@ details.later summary{cursor:pointer;color:var(--muted);font-size:15px;min-heigh
       twist:{ label:"Colpo di scena", text:"Liesl doveva avere sedici anni. Charmian Carr ne aveva 21." },
       fun:"Hellbrunn fu costruito nel primo Seicento dall'arcivescovo Markus Sittikus. I giochi d'acqua servivano a bagnare gli ospiti, e si racconta che il posto del principe a tavola restasse asciutto.",
       challenge:"Foto nel gazebo con la posa di Liesl, ma con i piedi ben saldi a terra. Ricordati della caviglia.",
+      clip:{ url:"https://youtu.be/pcj4boVT4fc", label:"Quindici anni, quasi sedici (in inglese)" },
       quizzes:[
-        { q:"Con chi canta Liesl Sixteen Going on Seventeen?", opts:["Con Rolf, il fattorino dei telegrammi","Con suo fratello Friedrich","Con Max Detweiler"], ok:0, why:"Con Rolf, il suo primo amore." },
-        { q:"Quale canzone cantano Maria e il Capitano nel gazebo?", opts:["Something Good","Do-Re-Mi","So Long, Farewell"], ok:0, why:"Something Good: è la scena in cui si dichiarano." },
-        { q:"Che cosa diventa Rolf col passare del film?", opts:["Un sostenitore dei nazisti","Un marinaio","Un monaco"], ok:0, why:"Si lascia attrarre dal regime e alla fine tradisce i von Trapp." }
+        { q:"Come si intitola in italiano la canzone di Liesl e Rolfe nel gazebo?", opts:["Quindici anni, quasi sedici", "Non baciarmi ancora", "Le cose che piacciono a me", "Addio, ciao ciao"], ok:0, why:"Liesl e Rolfe cantano «Quindici anni, quasi sedici»." },
+        { q:"Quale canzone cantano Maria e il comandante nel gazebo?", opts:["Non baciarmi ancora", "Cerca il tuo mondo", "Il pastore che pascolava", "Da domani splende il sole"], ok:0, why:"Il duetto tra Maria e Georg si intitola «Non baciarmi ancora»." },
+        { q:"Chi scopre i von Trapp nascosti nel cimitero dell'abbazia?", opts:["Rolfe, che esita davanti a Liesl", "Herr Zeller in persona", "Il maggiordomo della villa", "La baronessa Schraeder"], ok:0, why:"Li scopre Rolfe, il ragazzo che aveva cantato con Liesl. Davanti a lei esita." }
       ],
       src:"Fonti: Panorama Tours, Wikipedia, The Take, Films of the Fifties, Rodgers & Hammerstein."
     },
@@ -411,21 +419,22 @@ details.later summary{cursor:pointer;color:var(--muted);font-size:15px;min-heigh
       twist:{ label:"Colpo di scena", text:"Nella realt&agrave; non si sposarono qui. Il matrimonio vero fu il 26 novembre 1927 all'Abbazia di Nonnberg, a Salisburgo. Maria raccont&ograve; di non essere innamorata quel giorno: amava i bambini, e imparò ad amare Georg col tempo. Il film li sposa poco prima della fuga, ma in realt&agrave; erano sposati da 11 anni quando lasciarono l'Austria." },
       fun:"Il lago di Mondsee conserva anche insediamenti preistorici su palafitte, oggi patrimonio UNESCO.",
       challenge:"Entra piano, a voce bassa, e fatti fotografare di spalle in fondo alla navata. Niente flash: la chiesa &egrave; in uso.",
+      clip:{ url:"https://youtu.be/DIc6U0wbLJs", label:"il matrimonio" },
       quizzes:[
-        { q:"Che cosa cantano le suore mentre Maria avanza verso l'altare?", opts:["La canzone Maria, in versione corale","Climb Ev'ry Mountain","So Long, Farewell"], ok:0, why:"Riprendono la canzone che avevano cantato sul problema Maria." },
-        { q:"Chi era la fidanzata del Capitano prima di Maria?", opts:["La baronessa Schraeder","Suor Margaretta","La signora Schmidt, la governante"], ok:0, why:"La baronessa Elsa Schraeder, che si ritira quando capisce cosa prova il Capitano." },
-        { q:"Che cosa fanno le suore per fermare le auto dei nazisti?", opts:["Tolgono dei pezzi dai motori","Chiudono il cancello dell'abbazia","Suonano le campane"], ok:0, why:"Sabotano i motori, così i nazisti non possono inseguire i von Trapp." }
+        { q:"Dove deve presentarsi il comandante, secondo il telegramma che riceve?", opts:["Alla base navale di Bremerhaven", "Al ministero della guerra a Berlino", "Al porto di Amburgo", "Al comando marittimo di Kiel"], ok:0, why:"Il telegramma lo chiama a Bremerhaven per servire nella marina tedesca." },
+        { q:"Dove nasconde la Madre Superiora i von Trapp nell'abbazia?", opts:["Nel cimitero, fra le tombe", "Nel campanile", "In cantina", "Dietro l'organo della chiesa"], ok:0, why:"Li nasconde nel cimitero dell'abbazia, dietro le tombe." },
+        { q:"Quale canzone canta la Madre Superiora per spingere Maria a tornare?", opts:["Cerca il tuo mondo", "Maria", "Il suono della musica", "Addio, ciao ciao"], ok:0, why:"È «Cerca il tuo mondo»: la Madre Superiora la incoraggia a seguire il suo sogno." }
       ],
       src:"Fonti: The Black Case Diaries, TVovermind, Wikipedia, National Archives."
     }
   ];
 
   var FINAL = [
-    { id:"f1", q:"Qual è la maggiore dei figli del Capitano?", opts:["Liesl","Louisa","Brigitta"], ok:0, why:"Liesl, la sedicenne innamorata di Rolf." },
-    { id:"f2", q:"Quale canzone canta la Madre Badessa per incoraggiare Maria?", opts:["Climb Ev'ry Mountain","Edelweiss","Do-Re-Mi"], ok:0, why:"Climb Ev'ry Mountain: la spinge a tornare e a seguire il suo sogno." },
-    { id:"f3", q:"Che spettacolo mettono in scena i bambini per la baronessa e per Max?", opts:["Uno spettacolo di marionette, con The Lonely Goatherd","Una recita di Shakespeare","Un balletto"], ok:0, why:"Un teatrino di marionette con The Lonely Goatherd." },
-    { id:"f4", q:"Verso dove fuggono i von Trapp alla fine del film?", opts:["Sulle montagne, verso la Svizzera","Verso la Francia","A Vienna"], ok:0, why:"Attraversano le montagne a piedi, verso la Svizzera." },
-    { id:"f5", q:"Chi organizza l'esibizione dei von Trapp al Festival?", opts:["Max Detweiler","Herr Zeller","Rolf"], ok:0, why:"Max Detweiler, amico di famiglia e impresario." }
+    { id:"f1", q:"Quante suore sabotano le auto dei nazisti?", opts:["Due", "Tre", "Una sola", "Quattro"], ok:0, why:"Sono due suore a togliere pezzi dai motori, così le auto dei nazisti non partono." },
+    { id:"f2", q:"Chi iscrive i bambini al festival di Salisburgo contro il volere del padre?", opts:["Max", "La baronessa Schraeder", "Herr Zeller", "La Madre Superiora"], ok:0, why:"Max li iscrive mentre i due sposi sono in viaggio di nozze." },
+    { id:"f3", q:"Con quale canzone i ragazzi salutano gli ospiti alla fine della festa?", opts:["Addio, ciao ciao", "Il pastore che pascolava", "Do-Re-Mi", "Le cose che piacciono a me"], ok:0, why:"I ragazzi si congedano dagli ospiti con «Addio, ciao ciao»." },
+    { id:"f4", q:"Quale canzone cantano i bambini nello spettacolo di marionette?", opts:["Il pastore che pascolava", "Do-Re-Mi", "Addio, ciao ciao", "Non baciarmi ancora"], ok:0, why:"Il teatrino di marionette accompagna «Il pastore che pascolava»." },
+    { id:"f5", q:"Come lasciano l'Austria i von Trapp nel film?", opts:["A piedi, attraverso le montagne verso la Svizzera", "In treno verso l'Italia", "In auto fino al confine svizzero", "In barca sul lago di Mondsee"], ok:0, why:"Nel film attraversano le montagne a piedi. Nella realtà la famiglia prese un treno per l'Italia." }
   ];
 
   var RANKS = [
@@ -450,10 +459,22 @@ details.later summary{cursor:pointer;color:var(--muted);font-size:15px;min-heigh
 
   var LOCK = '<svg class="lock" viewBox="0 0 32 32" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><rect x="6" y="14" width="20" height="14" rx="2"/><path d="M10 14v-4a6 6 0 0 1 12 0v4"/></svg>';
 
+  var ORDERS = {};
+  function orderFor(key, n){
+    if (!ORDERS[key]) {
+      var a = [], i, j, t;
+      for (i = 0; i < n; i++) a.push(i);
+      for (i = n - 1; i > 0; i--) { j = Math.floor(Math.random() * (i + 1)); t = a[i]; a[i] = a[j]; a[j] = t; }
+      ORDERS[key] = a;
+    }
+    return ORDERS[key];
+  }
+
   function quizHTML(key, quiz, chosen, label){
     var answered = (typeof chosen === "number");
     var html = '<div class="quiz"><div class="mono" style="color:var(--muted)">' + (label || "Domanda") + '</div><div class="q">' + quiz.q + '</div><div class="opts">';
-    quiz.opts.forEach(function(o, i){
+    orderFor(key, quiz.opts.length).forEach(function(i){
+      var o = quiz.opts[i];
       var cls = "opt";
       if (answered) {
         if (i === quiz.ok) cls += " right";
@@ -532,6 +553,15 @@ details.later summary{cursor:pointer;color:var(--muted);font-size:15px;min-heigh
       '<div class="progress" aria-live="polite"><div class="mono">Timbri raccolti</div><div class="slots">' + slots + '</div><div class="mono">' + count + '</div></div>';
   }
 
+  function clipsHTML(s){
+    var list = s.clips || (s.clip ? [s.clip] : []);
+    list = list.filter(function(c){ return c && c.url; });
+    if (!list.length) return '';
+    return '<div class="clipbox"><div class="mono">' + (list.length > 1 ? 'Da guardare e ascoltare' : 'La scena del film') + '</div>' +
+      list.map(function(c){ return '<a class="btn clip" href="' + c.url + '" target="_blank" rel="noopener">' + (/audio|ascolta/i.test(c.label) ? 'Ascolta: ' : 'Guarda: ') + c.label + '</a>'; }).join("") +
+      '<div class="src">Si apre su YouTube, serve connessione.</div></div>';
+  }
+
   function stagePageHTML(s, i, nxt){
     if (state.open[s.id]) {
       return '<div class="stage' + (justOpened === s.id ? " thump" : "") + '" data-state="open">' +
@@ -540,6 +570,7 @@ details.later summary{cursor:pointer;color:var(--muted);font-size:15px;min-heigh
         '<div class="twist"><div class="mono">' + s.twist.label + '</div><p>' + s.twist.text + '</p></div>' +
         (s.fun ? '<div class="fun"><div class="mono">Curiosit&agrave;</div><p>' + s.fun + '</p></div>' : '') +
         '<div class="challenge"><div class="mono">Sfida foto</div><p>' + s.challenge + '</p></div>' +
+        clipsHTML(s) +
         s.quizzes.map(function(q, qi){ return quizHTML(s.id + ":" + qi, q, state.quiz[s.id + ":" + qi], "Domanda " + (qi + 1) + " di " + s.quizzes.length); }).join("") +
         '<div class="src">' + s.src + '</div></div>';
     }
