@@ -130,12 +130,16 @@ button,input{font:inherit;color:inherit}
 
 /* Copertina */
 .leaf.cover{background:var(--cover);color:var(--foil);border-color:var(--cover-deep);box-shadow:0 10px 26px rgba(0,0,0,.28), inset 16px 0 0 var(--cover-deep)}
-.leaf.cover::before{content:"";position:absolute;inset:16px 16px 16px 34px;border:1px solid var(--foil);opacity:.5;border-radius:4px;pointer-events:none}
+.leaf.cover::before{content:"";position:absolute;inset:14px 14px 14px 32px;border:2px solid #D9B84A;border-radius:6px;pointer-events:none;outline:1px solid #D9B84A;outline-offset:-8px}
 .cover .sheet{align-items:center;justify-content:center;text-align:center;gap:16px;padding:40px 30px 40px 40px;cursor:pointer}
-.cover .flower{width:92px;height:92px}
+.cover .cflower{width:clamp(120px,34vw,170px);height:auto}
+.cover h1{color:#fff;font-weight:400}
+.cover .csub{font-size:15px;line-height:1.45;color:#E5EAF0;max-width:30ch}
+.cover .holder{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#B9C6D4;margin-top:6px}
+.cover .holder b{display:block;font-family:var(--f-body);font-weight:600;font-size:clamp(15px,4.2vw,19px);letter-spacing:.14em;color:#fff;margin-top:4px}
 .cover h1{font-size:clamp(36px,9vw,54px);letter-spacing:.04em;text-transform:uppercase}
-.cover .langs{opacity:.85}
-.cover .dates{font-family:var(--f-mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase}
+.cover .langs{color:#D9B84A;opacity:1;letter-spacing:.14em;font-size:clamp(9px,2.6vw,11px);text-transform:uppercase;white-space:nowrap}
+.cover .dates{color:#D9B84A;font-family:var(--f-mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase}
 .cover .tap{margin-top:14px}
 
 /* Pagina dati */
@@ -526,11 +530,17 @@ details.later summary{cursor:pointer;color:var(--muted);font-size:15px;min-heigh
     return n;
   }
 
+  var COVERFLOWER = '<svg class="cflower" viewBox="-50 -50 100 100" aria-hidden="true"><g fill="#fff" stroke="#D9B84A" stroke-width="1.5">' +
+    [0,72,144,216,288].map(function(a){ return '<ellipse cx="0" cy="-24" rx="9" ry="22" transform="rotate(' + a + ')"/>'; }).join("") +
+    '</g><circle r="8" fill="#D9B84A"/></svg>';
+
   function coverHTML(){
-    return FLOWER +
+    return '<div class="mono langs">Reisepass &middot; Passport &middot; Passaporto</div>' +
+      COVERFLOWER +
       '<h1>Passaporto</h1>' +
-      '<div class="mono langs">Reisepass &middot; Passport &middot; Passaporto</div>' +
+      '<div class="csub">Edizione speciale per una super fan di<br><i>Tutti insieme appassionatamente</i></div>' +
       '<div class="dates">Salisburgo &middot; 8 e 9 ottobre 2026</div>' +
+      '<div class="holder mono">Titolare<b>ROBERTA STROPPARI</b></div>' +
       '<button class="btn foil tap" type="button" data-go="1">Apri il passaporto</button>';
   }
 
