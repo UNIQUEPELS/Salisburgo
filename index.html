@@ -1,0 +1,622 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Passaporto di Roberta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Rozha+One&display=swap">
+<style>
+/* Layout: un passaporto. Copertina e pagina dati in alto, poi sei tappe sigillate che si aprono con la parola segreta, poi esame finale e diploma. */
+:root{
+  --bg:#EDF1EE;
+  --surface:#FBFCFA;
+  --soft:#E1EAE4;
+  --ink:#14304B;
+  --muted:#51677A;
+  --line:#C6D2CA;
+  --accent:#2C694C;
+  --accent-ink:#FFFFFF;
+  --stamp:#B2392D;
+  --ok:#2C694C;
+  --bad:#B2392D;
+  --cover:#17395C;
+  --cover-deep:#102B46;
+  --foil:#E6CB7E;
+  --f-display:"Rozha One",Georgia,"Times New Roman",serif;
+  --f-body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --f-sign:"Caveat","Bradley Hand","Segoe Script",cursive;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1923;
+    --surface:#16232F;
+    --soft:#1D2D3B;
+    --ink:#E7EEF1;
+    --muted:#92A5B3;
+    --line:#2B3C4A;
+    --accent:#7CC59B;
+    --accent-ink:#0B1A12;
+    --stamp:#EE7060;
+    --ok:#7CC59B;
+    --bad:#EE7060;
+    --cover:#0F2A45;
+    --cover-deep:#0A1E33;
+    --foil:#E6CB7E;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1923;
+  --surface:#16232F;
+  --soft:#1D2D3B;
+  --ink:#E7EEF1;
+  --muted:#92A5B3;
+  --line:#2B3C4A;
+  --accent:#7CC59B;
+  --accent-ink:#0B1A12;
+  --stamp:#EE7060;
+  --ok:#7CC59B;
+  --bad:#EE7060;
+  --cover:#0F2A45;
+  --cover-deep:#0A1E33;
+  --foil:#E6CB7E;
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--f-body);
+  font-size:17px;
+  line-height:1.55;
+  padding-inline:16px;
+  padding-block:20px 56px;
+}
+.wrap{max-width:680px;margin-inline:auto;display:flex;flex-direction:column;gap:22px;min-width:0}
+h1,h2,h3{font-family:var(--f-display);font-weight:400;margin:0;text-wrap:balance;line-height:1.12}
+p{margin:0}
+.mono{font-family:var(--f-mono);font-size:12px;letter-spacing:.09em;text-transform:uppercase}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+/* Copertina */
+.cover{
+  position:relative;
+  background:var(--cover);
+  color:var(--foil);
+  border-radius:8px 20px 20px 8px;
+  padding:34px 24px 26px;
+  box-shadow:inset 12px 0 0 var(--cover-deep);
+  display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;
+}
+.cover::after{content:"";position:absolute;inset:12px 12px 12px 26px;border:1px solid var(--foil);opacity:.5;border-radius:4px;pointer-events:none}
+.cover .flower{width:84px;height:84px}
+.cover h1{font-size:clamp(34px,9vw,50px);letter-spacing:.04em;text-transform:uppercase}
+.cover .langs{color:var(--foil);opacity:.85}
+.cover .dates{font-family:var(--f-mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase}
+
+/* Pagina dati */
+.idpage{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:20px;display:flex;flex-direction:column;gap:16px}
+.idgrid{display:grid;grid-template-columns:auto 1fr;gap:12px 18px;align-items:start}
+.photo{width:92px;height:116px;border:1px solid var(--line);background:var(--soft);display:flex;align-items:center;justify-content:center;font-family:var(--f-display);font-size:44px;color:var(--accent)}
+.fields{display:grid;gap:10px;min-width:0}
+.field .mono{color:var(--muted);display:block}
+.field div:last-child{font-weight:600}
+.mrz{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;color:var(--muted);overflow-x:auto;white-space:pre;border-top:1px dashed var(--line);padding-top:12px;line-height:1.5}
+.sign{font-family:var(--f-sign);font-size:26px;color:var(--ink);line-height:1}
+
+/* Avanzamento */
+.progress{display:flex;flex-direction:column;gap:10px}
+.slots{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.slot{aspect-ratio:1;border:1.5px dashed var(--line);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--stamp);background:var(--surface);max-width:76px;width:100%;margin-inline:auto}
+.slot .stamp{width:100%;height:100%}
+.progress .mono{color:var(--muted)}
+
+/* Tappe */
+.stages{display:flex;flex-direction:column;gap:16px}
+.stage{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:20px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.stage[data-state="locked"]{border-style:dashed;background:transparent}
+.stage .kick{color:var(--muted)}
+.stage h2{font-size:28px}
+.stage[data-state="locked"] h2{color:var(--muted)}
+.head{display:flex;gap:14px;justify-content:space-between;align-items:flex-start}
+.head > div{min-width:0}
+.stamp{width:92px;height:92px;flex:none;color:var(--stamp)}
+.stamp text{font-family:var(--f-mono);fill:currentColor;letter-spacing:.12em}
+.thump .stamp{animation:thump .55s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes thump{0%{transform:scale(2.2) rotate(-18deg);opacity:0}60%{opacity:1}100%{transform:scale(1) rotate(0);opacity:1}}
+.lock{width:34px;height:34px;color:var(--muted);flex:none}
+.story{display:flex;flex-direction:column;gap:12px}
+.twist{background:var(--soft);border-left:4px solid var(--accent);padding:14px 16px;display:flex;flex-direction:column;gap:6px;border-radius:0 6px 6px 0}
+.twist .mono{color:var(--accent)}
+.fun{border:1px dashed var(--line);padding:14px 16px;border-radius:6px;display:flex;flex-direction:column;gap:6px}
+.fun .mono{color:var(--muted)}
+.challenge{border:1px solid var(--line);padding:14px 16px;border-radius:6px;display:flex;flex-direction:column;gap:6px}
+.challenge .mono{color:var(--muted)}
+.src{color:var(--muted);font-size:13px;line-height:1.45}
+
+/* Parola segreta */
+.unlock{display:flex;flex-direction:column;gap:10px}
+.unlock .row{display:flex;gap:10px;flex-wrap:wrap}
+.unlock input{flex:1 1 180px;min-width:0;min-height:52px;padding:10px 14px;background:var(--surface);border:2px solid var(--line);border-radius:6px;font-size:18px;letter-spacing:.04em;text-transform:uppercase}
+.unlock input:focus{border-color:var(--accent);outline:none}
+.btn{min-height:52px;padding:10px 22px;border:0;border-radius:6px;background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:17px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line);min-height:44px;padding:8px 16px;font-weight:600}
+.msg{min-height:1.4em;font-size:15px;color:var(--bad)}
+.shake{animation:shake .4s}
+@keyframes shake{20%{transform:translateX(-7px)}40%{transform:translateX(7px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+details.later summary{cursor:pointer;color:var(--muted);font-size:15px;min-height:44px;display:flex;align-items:center}
+
+/* Quiz */
+.quiz{display:flex;flex-direction:column;gap:10px}
+.quiz .q{font-weight:700}
+.opts{display:grid;gap:8px}
+.opt{text-align:left;min-height:52px;padding:10px 14px;border:1.5px solid var(--line);border-radius:6px;background:var(--surface);cursor:pointer;font-size:16px}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:disabled{cursor:default}
+.opt.right{border-color:var(--ok);background:var(--soft);font-weight:600}
+.opt.wrong{border-color:var(--bad)}
+.verdict{font-weight:700}
+.verdict.ok{color:var(--ok)}
+.verdict.bad{color:var(--bad)}
+.explain{font-size:15px;color:var(--muted)}
+
+/* Esame finale e diploma */
+.final{background:var(--surface);border:2px solid var(--accent);border-radius:6px;padding:20px;display:flex;flex-direction:column;gap:20px}
+.final h2{font-size:30px}
+.diploma{background:var(--surface);border-radius:4px;padding:10px;outline:2px solid var(--stamp);outline-offset:-2px;box-shadow:0 0 0 6px var(--bg),0 0 0 7px var(--stamp)}
+.diploma .inner{border:1px solid var(--stamp);padding:34px 20px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center}
+.diploma h2{font-size:clamp(34px,9vw,48px);letter-spacing:.05em;text-transform:uppercase}
+.diploma .to{font-family:var(--f-display);font-size:clamp(30px,9vw,48px);color:var(--accent);line-height:1}
+.diploma .rank{font-family:var(--f-display);font-size:24px}
+.diploma .score{color:var(--muted)}
+.diploma .stampbig{width:120px;height:120px;color:var(--stamp)}
+.diploma .sig{font-family:var(--f-sign);font-size:34px;line-height:1}
+
+/* Fonti e reset */
+.foot{display:flex;flex-direction:column;gap:12px;color:var(--muted);font-size:14px}
+.foot summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:600;color:var(--ink)}
+.foot ul{margin:0;padding-left:18px;display:grid;gap:6px;overflow-wrap:anywhere}
+.foot a{color:var(--accent)}
+.reset{align-self:flex-start}
+
+@media (max-width:420px){
+  body{font-size:16px}
+  .photo{width:78px;height:100px}
+  .stamp{width:76px;height:76px}
+}
+@media (prefers-reduced-motion:reduce){
+  .thump .stamp,.shake{animation:none}
+}
+</style>
+<style>[hidden]{display:none!important}html{-webkit-text-size-adjust:100%}body{margin:0}img{max-width:100%}</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="cover">
+    <svg class="flower" viewBox="0 0 100 100" aria-hidden="true">
+      <g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round">
+        <ellipse cx="50" cy="22" rx="8" ry="17"/>
+        <ellipse cx="50" cy="22" rx="8" ry="17" transform="rotate(60 50 50)"/>
+        <ellipse cx="50" cy="22" rx="8" ry="17" transform="rotate(120 50 50)"/>
+        <ellipse cx="50" cy="22" rx="8" ry="17" transform="rotate(180 50 50)"/>
+        <ellipse cx="50" cy="22" rx="8" ry="17" transform="rotate(240 50 50)"/>
+        <ellipse cx="50" cy="22" rx="8" ry="17" transform="rotate(300 50 50)"/>
+        <circle cx="50" cy="50" r="7" fill="currentColor"/>
+      </g>
+    </svg>
+    <h1>Passaporto</h1>
+    <div class="mono langs">Reisepass &middot; Passport &middot; Passaporto</div>
+    <div class="dates">Salisburgo &middot; 8 e 9 ottobre 2026</div>
+  </header>
+
+  <section class="idpage" aria-label="Pagina dati">
+    <div class="idgrid">
+      <div class="photo" aria-hidden="true">R</div>
+      <div class="fields">
+        <div class="field"><span class="mono">Titolare</span><div>ROBERTA STROPPARI</div></div>
+        <div class="field"><span class="mono">Qualifica</span><div>Super fan di Tutti insieme appassionatamente</div></div>
+        <div class="field"><span class="mono">Validit&agrave;</span><div>Due giorni, sei timbri</div></div>
+      </div>
+    </div>
+    <div class="field"><span class="mono">Rilasciante</span><div class="sign">i Giorgi</div></div>
+    <div class="mrz" aria-hidden="true">P&lt;SOM&lt;&lt;STROPPARI&lt;&lt;ROBERTA&lt;&lt;&lt;&lt;&lt;&lt;
+8101026SALZBURG&lt;&lt;&lt;&lt;&lt;1965&lt;&lt;&lt;&lt;&lt;&lt;</div>
+  </section>
+
+  <section class="progress" aria-live="polite">
+    <div class="slots" id="slots"></div>
+    <div class="mono" id="count"></div>
+  </section>
+
+  <main class="stages" id="stages"></main>
+
+  <section class="final" id="final" hidden></section>
+  <section id="diploma" hidden></section>
+
+  <footer class="foot">
+    <details>
+      <summary>Da dove vengono queste storie</summary>
+      <ul>
+        <li><a href="https://www.sound-of-music.com/worth-knowing/fun-facts-and-trivia-about-the-sound-of-music/" target="_blank" rel="noopener">sound-of-music.com, curiosit&agrave; sul film</a></li>
+        <li><a href="https://www.remindmagazine.com/article/26646/sound-of-music-bts-fun-facts/" target="_blank" rel="noopener">Reminisce, storie dal set</a></li>
+        <li><a href="https://www.watchmojo.com/articles/10-behind-the-scenes-stories-about-the-sound-of-music-60th-anniversary" target="_blank" rel="noopener">WatchMojo, dietro le quinte</a></li>
+        <li><a href="https://www.pressreader.com/uk/yours-uk/20180814/281672550778336" target="_blank" rel="noopener">Yours, ritardi e pioggia sul set</a></li>
+        <li><a href="https://www.buzzfeed.com/noradominick/sound-of-music-behind-the-scenes-facts" target="_blank" rel="noopener">BuzzFeed, curiosit&agrave; sul film</a></li>
+        <li><a href="https://theculturetrip.com/europe/austria/articles/why-austrians-really-hate-the-sound-of-music" target="_blank" rel="noopener">Culture Trip, gli austriaci e il film</a></li>
+        <li><a href="https://www.thestranger.com/theater/2015/12/02/23234852/as-an-austrian-im-aghast-at-americas-love-for-the-sound-of-music" target="_blank" rel="noopener">The Stranger, il parere di un autore austriaco</a></li>
+        <li><a href="https://www.npr.org/transcripts/856951396" target="_blank" rel="noopener">NPR, Plummer e il doppiaggio di Bill Lee</a></li>
+        <li><a href="https://www.irishtimes.com/culture/film/christopher-plummer-never-hid-his-dislike-of-the-sound-of-music-1.4477461" target="_blank" rel="noopener">Irish Times, Plummer e il film</a></li>
+        <li><a href="https://www.imdb.com/title/tt0059742/trivia/" target="_blank" rel="noopener">IMDb, trivia scritte dagli utenti</a></li>
+        <li><a href="https://the-take.com/read/what-is-the-true-story-behind-athe-sound-of-musicasa-gazebo-scenes" target="_blank" rel="noopener">The Take, la storia del gazebo</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Sixteen_Going_on_Seventeen" target="_blank" rel="noopener">Wikipedia, Sixteen Going on Seventeen</a></li>
+        <li><a href="https://filmsofthefifties.com/charmian-carr/" target="_blank" rel="noopener">Films of the Fifties, Charmian Carr</a></li>
+        <li><a href="https://tvovermind.com/the-sound-of-music-10-easter-eggs-and-behind-the-scenes-trivia/" target="_blank" rel="noopener">TVovermind, la vera Maria nel film</a></li>
+        <li><a href="https://www.blackcasediaries.com/new-blog/the-case-is-alive-with-the-sound-of-music-part-2-wwz52-f9xkg-zhamd" target="_blank" rel="noopener">The Black Case Diaries, la scena del matrimonio</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Maria_von_Trapp" target="_blank" rel="noopener">Wikipedia, Maria von Trapp</a></li>
+        <li><a href="https://www.archives.gov/publications/prologue/2005/winter/von-trapps-html" target="_blank" rel="noopener">National Archives, il film e la realt&agrave;</a></li>
+        <li><a href="https://www.vontrappresort.com/about-us.htm" target="_blank" rel="noopener">von Trapp Family Lodge, i dieci figli</a></li>
+      </ul>
+    </details>
+    <button class="btn ghost reset" id="reset" type="button">Azzera il passaporto</button>
+  </footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var STORE_KEY = "passaporto-roberta-v2";
+  var state = { open:{}, quiz:{}, fin:{} };
+  try {
+    var raw = localStorage.getItem(STORE_KEY);
+    if (raw) {
+      var p = JSON.parse(raw);
+      if (p && typeof p === "object") {
+        state.open = p.open || {};
+        state.quiz = p.quiz || {};
+        state.fin = p.fin || {};
+      }
+    }
+  } catch (e) {}
+  function save(){ try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) {} }
+
+  /* Le parole segrete sono scritte al contrario, cosi non si leggono a occhio nel codice. */
+  function unrev(s){ return s.split("").reverse().join(""); }
+  function norm(s){
+    return String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/ß/g,"ss").replace(/[^a-z0-9]/g,"");
+  }
+
+  var STAGES = [
+    {
+      id:"s1", num:1, top:"SALZBURG", code:"ALP", date:"8.10.2026", rot:-7,
+      kicker:"Tappa 1 &middot; 8 ottobre &middot; ultimi chilometri",
+      title:"La scena del prato",
+      words:["enilloc"],
+      story:[
+        "Julie Andrews che gira su se stessa nel prato &egrave; la scena pi&ugrave; famosa del film. Per girarla, una cinepresa era legata a un elicottero che le volava incontro. Ogni volta che le passava intorno, lo spostamento d'aria la scaraventava nell'erba. Lo ha raccontato lei stessa a Jimmy Fallon: sei o sette volte, con la bocca piena di terra e fieno.",
+        "Il tempo non aiut&ograve;. Le previsioni promettevano cielo sereno, invece piovve quasi di continuo, e la scena d'apertura era in fondo al calendario. Quando la produzione la gir&ograve; era gi&agrave; indietro di 25 giorni e 740.000 dollari oltre il budget."
+      ],
+      twist:{ label:"Colpo di scena", text:"I capelli biondi di Maria? Le mesh, all'inizio, vennero arancioni. Per rimediare le tagliarono i capelli corti e li decolorarono del tutto. E il Capitano gir&ograve; quasi tutte le sue scene in circa 11 giorni, mangiando cos&igrave; tante paste che dovettero allargargli il costume." },
+      fun:"Il prato dell'inizio sarebbe in Germania, a Mehlweg, appena oltre il confine con l'Austria.",
+      challenge:"Appena scendi dall'auto, apri le braccia e gira su te stessa tre volte. Si gira un video. Niente elicotteri.",
+      quizzes:[
+        { q:"Dove si trova Maria nella scena d'apertura, mentre canta?", opts:["In un prato in alta montagna","Nel giardino dell'abbazia","Sulle rive di un lago"], ok:0, why:"Il film si apre con Maria che gira su se stessa in un prato di montagna, cantando The Sound of Music." },
+        { q:"Che cosa è Maria all'inizio del film?", opts:["Una postulante, aspirante suora","Una governante di professione","Un'insegnante di musica"], ok:0, why:"Vive nell'abbazia di Nonnberg come postulante, e ogni tanto combina guai." },
+        { q:"Dove la manda la Madre Badessa?", opts:["Dal capitano von Trapp, come governante dei suoi figli","In un altro convento, a Vienna","In una scuola di musica"], ok:0, why:"La manda a occuparsi dei sette figli del capitano von Trapp." }
+      ],
+      src:"Fonti: sound-of-music.com, Reminisce, Yours, WatchMojo, Today."
+    },
+    {
+      id:"s2", num:2, top:"SALZBURG", code:"MIR", date:"8.10.2026", rot:6,
+      kicker:"Tappa 2 &middot; 8 ottobre &middot; Giardini di Mirabell",
+      title:"Do-Re-Mi",
+      words:["eton"],
+      story:[
+        "Qui Maria insegna le note ai bambini. Secondo le raccolte di curiosit&agrave; sul film, il momento in cui lei e i ragazzi pedalano in bicicletta cantando richiese due mesi di prove prima di essere girato.",
+        "Nel film la canzone porta la compagnia in giro per tutta Salisburgo. Un autore austriaco, cresciuto qui, la trova comica: nelle inquadrature successive il gruppo compare in punti della citt&agrave; lontanissimi tra loro, come se si teletrasportasse."
+      ],
+      twist:{ label:"Colpo di scena", text:"I von Trapp veri erano dieci, non sette. Nel film nomi, et&agrave; e sesso furono cambiati. Quelli veri dei primi sette si chiamavano Rupert, Werner, Johanna, Agathe, Maria, Martina e Hedwig. Gli altri tre nacquero dal matrimonio con Maria." },
+      fun:"Il palazzo di Mirabell fu costruito nel 1606 dall'arcivescovo Wolf Dietrich per la sua amante, Salome Alt.",
+      challenge:"Foto di voi due che saltate insieme sulle scale, come i bambini. Con prudenza.",
+      quizzes:[
+        { q:"Che cosa insegna Maria ai bambini con Do-Re-Mi?", opts:["Le note musicali","Una lingua straniera","Le tabelline"], ok:0, why:"Parte dalle sette note e fa cantare tutti." },
+        { q:"Come chiama i figli il Capitano, all'inizio del film?", opts:["Con un fischietto da nostromo","Con una campanella","Con una tromba"], ok:0, why:"Governa la casa come una nave e li richiama con un fischietto." },
+        { q:"Con che cosa cuce Maria i vestiti da gioco dei bambini?", opts:["Con le vecchie tende della sua camera","Con un lenzuolo","Con una coperta di lana"], ok:0, why:"Trasforma le tende della sua stanza in abiti per giocare all'aperto." }
+      ],
+      src:"Fonti: BuzzFeed, The Stranger, National Archives, von Trapp Family Lodge."
+    },
+    {
+      id:"s3", num:3, top:"SALZBURG", code:"RES", date:"8.10.2026", rot:-5,
+      kicker:"Tappa 3 &middot; 8 ottobre &middot; centro storico",
+      title:"Il film che Salisburgo non guardava",
+      words:["aicudif"],
+      story:[
+        "Mentre cammini in questo centro, ricordati di una cosa: in Austria il film fu un fiasco. All'uscita, nel 1965, non piacque n&eacute; qui n&eacute; in Germania, e ancora oggi molti austriaci non l'hanno mai visto.",
+        "Un autore austriaco racconta che diversi attori emigrati a Hollywood, fuggiti dai nazisti, protestarono contro il ritratto troppo indulgente dei loro ex connazionali, e che per questo lo studio ritir&ograve; il film dai cinema europei. &Egrave; la sua versione, non confermata da altre fonti.",
+        "In I Have Confidence, quando Maria corre in un cortile verso la casa dei von Trapp, inciampa. Secondo le trivia di IMDb, scritte dagli utenti, fu un incidente vero."
+      ],
+      twist:{ label:"Colpo di scena", text:"Lo storico Doron Rabinovici osserva, con ironia, che gli austriaci forse notarono una cosa: i nazisti del film sono austriaci." },
+      fun:"A pochi passi da qui, in Getreidegasse 9, c'&egrave; la casa natale di Mozart.",
+      challenge:"Attraversa la piazza con passo deciso, come una governante in missione. Ti fotografano da dietro.",
+      quizzes:[
+        { q:"Quale canzone canta Maria, andando verso la casa dei von Trapp, per darsi coraggio?", opts:["I Have Confidence","Edelweiss","The Lonely Goatherd"], ok:0, why:"È I Have Confidence, cantata mentre attraversa la città." },
+        { q:"Quando i bambini hanno paura durante il temporale, che cosa fa Maria?", opts:["Canta My Favorite Things","Li manda a dormire","Chiama il Capitano"], ok:0, why:"Li tranquillizza cantando My Favorite Things, e presto cantano tutti insieme." },
+        { q:"Quanti sono i figli del Capitano, nel film?", opts:["Sette","Cinque","Dieci"], ok:0, why:"Sette, da Liesl, la maggiore, fino a Gretl, la più piccola." }
+      ],
+      src:"Fonti: Culture Trip, The Stranger, Engelsberg Ideas, Freud's Butcher (cita Rabinovici), IMDb (trivia degli utenti)."
+    },
+    {
+      id:"s4", num:4, top:"SALZBURG", code:"EDE", date:"8.10.2026", rot:7,
+      kicker:"Tappa 4 &middot; 8 ottobre &middot; lungo la Salzach, al tramonto",
+      title:"Edelweiss",
+      words:["aniplaallets"],
+      story:[
+        "Edelweiss non &egrave; un canto popolare austriaco, e non &egrave; l'inno nazionale. Fu scritta per il musical da Rodgers e Hammerstein. L'inno vero si chiama Land der Berge, Land am Strome: terra di monti, terra di fiumi.",
+        "Quando senti il Capitano cantare Edelweiss, non &egrave; Christopher Plummer. &Egrave; la voce di Bill Lee, cantante che ha prestato la voce a molti film, anche Disney come Peter Pan e Lilli e il vagabondo. Plummer, che era un attore di teatro classico, si infastid&igrave; parecchio."
+      ],
+      twist:{ label:"Colpo di scena", text:"Plummer chiamava il film The Sound of Mucus, il suono del muco: lo trovava troppo sdolcinato. Rimase comunque amico di Julie Andrews per tutta la vita, e lei sostiene che il suo cinismo abbia salvato il film dal diventare stucchevole. Il nipote del vero Georg, interrogato da Plummer, lo descrisse come l'uomo pi&ugrave; noioso che avesse mai incontrato." },
+      fun:"La fortezza di Hohensalzburg, che vedi illuminata, risalirebbe al 1077 ed &egrave; tra i castelli medievali pi&ugrave; grandi d'Europa.",
+      challenge:"Foto di profilo davanti alla fortezza che si illumina. Poi si canta una strofa a bassa voce. Nessun doppiaggio.",
+      quizzes:[
+        { q:"Che cosa rappresenta Edelweiss quando il Capitano la canta al concerto?", opts:["Un addio alla sua patria","Una sfida alla baronessa","Una ninna nanna per Gretl"], ok:0, why:"Canta il suo amore per l'Austria poco prima di fuggire, e la sala si unisce a lui." },
+        { q:"Con quale strumento si accompagna il Capitano mentre canta Edelweiss?", opts:["La chitarra","Il violino","Il pianoforte"], ok:0, why:"Si accompagna con la chitarra." },
+        { q:"Dove si esibisce la famiglia, in quella scena?", opts:["Al Festival di Salisburgo","Alla Scala di Milano","In una chiesa di Vienna"], ok:0, why:"Il concerto è il Festival di Salisburgo, ed è l'occasione per la fuga." }
+      ],
+      src:"Fonti: Culture Trip, NPR, Irish Times, IMDb (trivia degli utenti), Grunge."
+    },
+    {
+      id:"s5", num:5, top:"HELLBRUNN", code:"HEL", date:"9.10.2026", rot:-6,
+      kicker:"Tappa 5 &middot; 9 ottobre &middot; Hellbrunn",
+      title:"Il gazebo",
+      words:["icides"],
+      story:[
+        "Questo gazebo nacque a Leopoldskron, nel giardino del castello usato per il film, e fu poi trasferito qui a Hellbrunn per i visitatori. Una guida lo descrive come ricostruito dopo un restauro completo, quindi non &egrave; il pezzo originale intatto. Gli interni del ballo di Liesl e Rolf, invece, furono girati in uno studio a Hollywood.",
+        "Fu l'ultima scena girata del film. Al primo ciak Charmian Carr, cio&egrave; Liesl, salt&ograve; su una panca liscia, senza gomma antiscivolo ai piedi, scivol&ograve; e sfond&ograve; un vetro. Caviglia slogata. Ricevette un antidolorifico, la fasciarono, la coprirono con trucco e calze, e lei volle finire il ballo. L'intera troupe le fece un applauso. In alcune edizioni del film la benda si vede ancora."
+      ],
+      twist:{ label:"Colpo di scena", text:"Liesl doveva avere sedici anni. Charmian Carr ne aveva 21." },
+      fun:"Hellbrunn fu costruito nel primo Seicento dall'arcivescovo Markus Sittikus. I giochi d'acqua servivano a bagnare gli ospiti, e si racconta che il posto del principe a tavola restasse asciutto.",
+      challenge:"Foto nel gazebo con la posa di Liesl, ma con i piedi ben saldi a terra. Ricordati della caviglia.",
+      quizzes:[
+        { q:"Con chi canta Liesl Sixteen Going on Seventeen?", opts:["Con Rolf, il fattorino dei telegrammi","Con suo fratello Friedrich","Con Max Detweiler"], ok:0, why:"Con Rolf, il suo primo amore." },
+        { q:"Quale canzone cantano Maria e il Capitano nel gazebo?", opts:["Something Good","Do-Re-Mi","So Long, Farewell"], ok:0, why:"Something Good: è la scena in cui si dichiarano." },
+        { q:"Che cosa diventa Rolf col passare del film?", opts:["Un sostenitore dei nazisti","Un marinaio","Un monaco"], ok:0, why:"Si lascia attrarre dal regime e alla fine tradisce i von Trapp." }
+      ],
+      src:"Fonti: Panorama Tours, Wikipedia, The Take, Films of the Fifties, Rodgers & Hammerstein."
+    },
+    {
+      id:"s6", num:6, top:"MONDSEE", code:"MON", date:"9.10.2026", rot:5,
+      kicker:"Tappa 6 &middot; 9 ottobre &middot; Basilica di Mondsee",
+      title:"Il matrimonio",
+      words:["asops"],
+      story:[
+        "In questa basilica fu girato il matrimonio di Maria e del Capitano, in una sola giornata, con 600 abitanti del posto come comparse. Secondo un blog di cinema, a fare il celebrante fu il vescovo dell'abbazia in persona.",
+        "La vera Maria von Trapp &egrave; tra le comparse fuori dalla chiesa, mentre Julie Andrews entra. Quasi nessuno se ne accorge."
+      ],
+      twist:{ label:"Colpo di scena", text:"Nella realt&agrave; non si sposarono qui. Il matrimonio vero fu il 26 novembre 1927 all'Abbazia di Nonnberg, a Salisburgo. Maria raccont&ograve; di non essere innamorata quel giorno: amava i bambini, e imparò ad amare Georg col tempo. Il film li sposa poco prima della fuga, ma in realt&agrave; erano sposati da 11 anni quando lasciarono l'Austria." },
+      fun:"Il lago di Mondsee conserva anche insediamenti preistorici su palafitte, oggi patrimonio UNESCO.",
+      challenge:"Entra piano, a voce bassa, e fatti fotografare di spalle in fondo alla navata. Niente flash: la chiesa &egrave; in uso.",
+      quizzes:[
+        { q:"Che cosa cantano le suore mentre Maria avanza verso l'altare?", opts:["La canzone Maria, in versione corale","Climb Ev'ry Mountain","So Long, Farewell"], ok:0, why:"Riprendono la canzone che avevano cantato sul problema Maria." },
+        { q:"Chi era la fidanzata del Capitano prima di Maria?", opts:["La baronessa Schraeder","Suor Margaretta","La signora Schmidt, la governante"], ok:0, why:"La baronessa Elsa Schraeder, che si ritira quando capisce cosa prova il Capitano." },
+        { q:"Che cosa fanno le suore per fermare le auto dei nazisti?", opts:["Tolgono dei pezzi dai motori","Chiudono il cancello dell'abbazia","Suonano le campane"], ok:0, why:"Sabotano i motori, così i nazisti non possono inseguire i von Trapp." }
+      ],
+      src:"Fonti: The Black Case Diaries, TVovermind, Wikipedia, National Archives."
+    }
+  ];
+
+  var FINAL = [
+    { id:"f1", q:"Qual è la maggiore dei figli del Capitano?", opts:["Liesl","Louisa","Brigitta"], ok:0, why:"Liesl, la sedicenne innamorata di Rolf." },
+    { id:"f2", q:"Quale canzone canta la Madre Badessa per incoraggiare Maria?", opts:["Climb Ev'ry Mountain","Edelweiss","Do-Re-Mi"], ok:0, why:"Climb Ev'ry Mountain: la spinge a tornare e a seguire il suo sogno." },
+    { id:"f3", q:"Che spettacolo mettono in scena i bambini per la baronessa e per Max?", opts:["Uno spettacolo di marionette, con The Lonely Goatherd","Una recita di Shakespeare","Un balletto"], ok:0, why:"Un teatrino di marionette con The Lonely Goatherd." },
+    { id:"f4", q:"Verso dove fuggono i von Trapp alla fine del film?", opts:["Sulle montagne, verso la Svizzera","Verso la Francia","A Vienna"], ok:0, why:"Attraversano le montagne a piedi, verso la Svizzera." },
+    { id:"f5", q:"Chi organizza l'esibizione dei von Trapp al Festival?", opts:["Max Detweiler","Herr Zeller","Rolf"], ok:0, why:"Max Detweiler, amico di famiglia e impresario." }
+  ];
+
+  var RANKS = [
+    { min:0.87, name:"Baronessa von Trapp" },
+    { min:0.65, name:"Governante di prima classe" },
+    { min:0.4, name:"Postulante promettente" },
+    { min:0,  name:"Novizia in prova" }
+  ];
+
+  var justOpened = null;
+  var $ = function(id){ return document.getElementById(id); };
+
+  function stampSVG(s, cls){
+    return '<svg class="' + (cls || "stamp") + '" viewBox="0 0 120 120" role="img" aria-label="Timbro della tappa ' + s.num + '">' +
+      '<g transform="rotate(' + s.rot + ' 60 60)">' +
+      '<circle cx="60" cy="60" r="55" fill="none" stroke="currentColor" stroke-width="3"/>' +
+      '<circle cx="60" cy="60" r="47" fill="none" stroke="currentColor" stroke-width="1"/>' +
+      '<text x="60" y="36" text-anchor="middle" font-size="11">' + s.top + '</text>' +
+      '<text x="60" y="70" text-anchor="middle" font-size="28" font-weight="500" style="letter-spacing:.06em">' + s.code + '</text>' +
+      '<text x="60" y="90" text-anchor="middle" font-size="9">' + s.date + '</text>' +
+      '</g></svg>';
+  }
+
+  var LOCK = '<svg class="lock" viewBox="0 0 32 32" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><rect x="6" y="14" width="20" height="14" rx="2"/><path d="M10 14v-4a6 6 0 0 1 12 0v4"/></svg>';
+
+  function quizHTML(key, quiz, chosen, label){
+    var answered = (typeof chosen === "number");
+    var html = '<div class="quiz"><div class="mono" style="color:var(--muted)">' + (label || "Domanda") + '</div><div class="q">' + quiz.q + '</div><div class="opts">';
+    quiz.opts.forEach(function(o, i){
+      var cls = "opt";
+      if (answered) {
+        if (i === quiz.ok) cls += " right";
+        else if (i === chosen) cls += " wrong";
+      }
+      html += '<button type="button" class="' + cls + '" data-quiz="' + key + '" data-i="' + i + '"' + (answered ? " disabled" : "") + '>' + o + '</button>';
+    });
+    html += '</div>';
+    if (answered) {
+      var good = chosen === quiz.ok;
+      html += '<div class="verdict ' + (good ? "ok" : "bad") + '">' + (good ? "Esatto." : "Non proprio.") + '</div><div class="explain">' + quiz.why + '</div>';
+    }
+    html += '</div>';
+    return html;
+  }
+
+  function nextIndex(){
+    for (var i = 0; i < STAGES.length; i++) if (!state.open[STAGES[i].id]) return i;
+    return -1;
+  }
+
+  function stageHTML(s, i, nxt){
+    if (state.open[s.id]) {
+      var h = '<article class="stage' + (justOpened === s.id ? " thump" : "") + '" data-state="open" id="card-' + s.id + '">' +
+        '<div class="head"><div><div class="mono kick">' + s.kicker + '</div><h2>' + s.title + '</h2></div>' + stampSVG(s) + '</div>' +
+        '<div class="story">' + s.story.map(function(p){ return '<p>' + p + '</p>'; }).join("") + '</div>' +
+        '<div class="twist"><div class="mono">' + s.twist.label + '</div><p>' + s.twist.text + '</p></div>' +
+        (s.fun ? '<div class="fun"><div class="mono">Curiosit&agrave;</div><p>' + s.fun + '</p></div>' : '') +
+        '<div class="challenge"><div class="mono">Sfida foto</div><p>' + s.challenge + '</p></div>' +
+        s.quizzes.map(function(q, qi){ return quizHTML(s.id + ":" + qi, q, state.quiz[s.id + ":" + qi], "Domanda " + (qi + 1) + " di " + s.quizzes.length); }).join("") +
+        '<div class="src">' + s.src + '</div></article>';
+      return h;
+    }
+    var form = '<form class="unlock" data-stage="' + s.id + '" autocomplete="off">' +
+      '<label class="mono" style="color:var(--muted)" for="w-' + s.id + '">Parola segreta</label>' +
+      '<div class="row"><input id="w-' + s.id + '" name="w" type="text" inputmode="text" autocapitalize="characters" autocorrect="off" spellcheck="false" placeholder="Scrivila qui">' +
+      '<button class="btn" type="submit">Apri</button></div>' +
+      '<div class="msg" role="status" aria-live="polite"></div></form>';
+    var body = (i === nxt)
+      ? '<p>La parola segreta te la dicono i Giorgi quando arrivate. &Egrave; una parola in italiano.</p>' + form
+      : '<details class="later"><summary>Ho gi&agrave; la parola</summary>' + form + '</details>';
+    return '<article class="stage" data-state="locked" id="card-' + s.id + '">' +
+      '<div class="head"><div><div class="mono kick">Tappa ' + s.num + '</div><h2>Sigillata</h2></div>' + LOCK + '</div>' + body + '</article>';
+  }
+
+  function score(){
+    var n = 0;
+    STAGES.forEach(function(s){ s.quizzes.forEach(function(q, qi){ if (state.quiz[s.id + ":" + qi] === q.ok) n++; }); });
+    FINAL.forEach(function(f){ if (state.fin[f.id] === f.ok) n++; });
+    return n;
+  }
+
+  function renderProgress(){
+    var opened = STAGES.filter(function(s){ return state.open[s.id]; }).length;
+    $("slots").innerHTML = STAGES.map(function(s){
+      return '<div class="slot">' + (state.open[s.id] ? stampSVG(s, "stamp mini") : "") + '</div>';
+    }).join("");
+    var c = $("count");
+    c.textContent = opened === 0 ? "Nessun timbro: il passaporto è ancora vuoto" :
+      opened + " di " + STAGES.length + (opened === 1 ? " timbro" : " timbri");
+  }
+
+  function renderFinal(){
+    var all = STAGES.every(function(s){ return state.open[s.id]; });
+    var box = $("final");
+    if (!all) { box.hidden = true; box.innerHTML = ""; return; }
+    box.hidden = false;
+    box.innerHTML = '<div><div class="mono" style="color:var(--accent)">Prova finale</div><h2>Esame da Baronessa</h2></div>' +
+      '<p>Sei timbri raccolti. Ultime cinque domande. Si possono leggere ad alta voce mentre si guida: rispondi tu.</p>' +
+      FINAL.map(function(f, fi){ return quizHTML(f.id, f, state.fin[f.id], "Esame finale " + (fi + 1) + " di " + FINAL.length); }).join("");
+  }
+
+  function renderDiploma(){
+    var box = $("diploma");
+    var done = STAGES.every(function(s){ return state.open[s.id]; }) &&
+               FINAL.every(function(f){ return typeof state.fin[f.id] === "number"; });
+    if (!done) { box.hidden = true; box.innerHTML = ""; return; }
+    var sc = score(), total = STAGES.reduce(function(a, s){ return a + s.quizzes.length; }, 0) + FINAL.length;
+    var rank = RANKS.filter(function(r){ return sc / total >= r.min; })[0].name;
+    box.hidden = false;
+    box.innerHTML = '<div class="diploma"><div class="inner">' +
+      '<div class="mono" style="color:var(--stamp)">Salisburgo &middot; Mondsee &middot; 8 e 9 ottobre 2026</div>' +
+      '<h2>Diploma</h2>' +
+      '<p>si conferisce a</p>' +
+      '<div class="to">Roberta Stroppari</div>' +
+      '<div class="rank">' + rank + '</div>' +
+      '<p>per aver percorso Salisburgo sulle orme di Maria e del Capitano, dal prato dell\'elicottero fino all\'altare di Mondsee.</p>' +
+      '<div class="score mono">' + sc + ' risposte esatte su ' + total + '</div>' +
+      '<div class="sig">i Giorgi</div>' +
+      '</div></div>';
+  }
+
+  function renderAll(){
+    var nxt = nextIndex();
+    $("stages").innerHTML = STAGES.map(function(s, i){ return stageHTML(s, i, nxt); }).join("");
+    renderProgress();
+    renderFinal();
+    renderDiploma();
+  }
+
+  function keepScroll(fn){
+    var y = window.scrollY;
+    fn();
+    window.scrollTo(0, y);
+  }
+
+  function reduced(){
+    try { return window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) { return false; }
+  }
+
+  document.addEventListener("submit", function(ev){
+    var form = ev.target.closest ? ev.target.closest("form.unlock") : null;
+    if (!form) return;
+    ev.preventDefault();
+    var s = STAGES.filter(function(x){ return x.id === form.getAttribute("data-stage"); })[0];
+    if (!s) return;
+    var input = form.querySelector("input");
+    var msg = form.querySelector(".msg");
+    var typed = norm(input.value);
+    var good = s.words.some(function(w){ return norm(unrev(w)) === typed; });
+    if (typed && good) {
+      state.open[s.id] = true;
+      save();
+      justOpened = s.id;
+      renderAll();
+      var card = $("card-" + s.id);
+      if (card) card.scrollIntoView({ behavior: reduced() ? "auto" : "smooth", block: "start" });
+    } else {
+      msg.textContent = typed ? "Non è la parola giusta. Ascolta bene." : "Scrivi la parola che ti hanno detto.";
+      input.classList.remove("shake");
+      void input.offsetWidth;
+      input.classList.add("shake");
+      input.focus();
+    }
+  });
+
+  document.addEventListener("click", function(ev){
+    var t = ev.target.closest ? ev.target.closest("button") : null;
+    if (!t) return;
+    var key = t.getAttribute("data-quiz");
+    if (key) {
+      var i = parseInt(t.getAttribute("data-i"), 10);
+      if (key.charAt(0) === "f") state.fin[key] = i; else state.quiz[key] = i;
+      save();
+      justOpened = null;
+      keepScroll(renderAll);
+      return;
+    }
+    if (t.id === "reset") {
+      if (t.getAttribute("data-armed") === "1") {
+        state = { open:{}, quiz:{}, fin:{} };
+        save();
+        justOpened = null;
+        t.removeAttribute("data-armed");
+        t.textContent = "Azzera il passaporto";
+        renderAll();
+        window.scrollTo(0, 0);
+      } else {
+        t.setAttribute("data-armed", "1");
+        t.textContent = "Tocca di nuovo per cancellare tutto";
+        setTimeout(function(){
+          t.removeAttribute("data-armed");
+          t.textContent = "Azzera il passaporto";
+        }, 4000);
+      }
+    }
+  });
+
+  renderAll();
+})();
+</script>
+
+</body>
+</html>
