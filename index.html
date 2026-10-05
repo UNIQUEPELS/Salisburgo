@@ -68,40 +68,80 @@
 }
 
 *{box-sizing:border-box}
+html,body{height:100%;margin:0}
+html{-webkit-text-size-adjust:100%}
 body{
   background:var(--bg);
   color:var(--ink);
   font-family:var(--f-body);
   font-size:17px;
   line-height:1.55;
-  padding-inline:16px;
-  padding-block:20px 56px;
+  overflow:hidden;
+  overscroll-behavior:none;
 }
-.wrap{max-width:680px;margin-inline:auto;display:flex;flex-direction:column;gap:22px;min-width:0}
 h1,h2,h3{font-family:var(--f-display);font-weight:400;margin:0;text-wrap:balance;line-height:1.12}
 p{margin:0}
 .mono{font-family:var(--f-mono);font-size:12px;letter-spacing:.09em;text-transform:uppercase}
 button,input{font:inherit;color:inherit}
 :focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 
-/* Copertina */
-.cover{
-  position:relative;
-  background:var(--cover);
-  color:var(--foil);
-  border-radius:8px 20px 20px 8px;
-  padding:34px 24px 26px;
-  box-shadow:inset 12px 0 0 var(--cover-deep);
-  display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;
+/* Il libretto: una pila di fogli, ognuno incernierato a sinistra */
+.app{
+  height:100vh;height:100dvh;
+  display:flex;flex-direction:column;gap:12px;
+  padding:max(12px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));
 }
-.cover::after{content:"";position:absolute;inset:12px 12px 12px 26px;border:1px solid var(--foil);opacity:.5;border-radius:4px;pointer-events:none}
-.cover .flower{width:84px;height:84px}
-.cover h1{font-size:clamp(34px,9vw,50px);letter-spacing:.04em;text-transform:uppercase}
-.cover .langs{color:var(--foil);opacity:.85}
+.deck{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;perspective:2200px;perspective-origin:50% 35%}
+.book{position:relative;width:min(100%,620px);height:100%;max-height:980px}
+.book.noanim .leaf,.book.noanim .leaf::after{transition:none!important}
+
+.leaf{
+  position:absolute;inset:0;
+  transform-origin:left center;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:4px 16px 16px 4px;
+  box-shadow:0 10px 26px rgba(0,0,0,.18), inset 12px 0 16px -14px rgba(0,0,0,.4);
+  overflow:hidden;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  transition:transform .75s cubic-bezier(.4,.1,.2,1), opacity .25s linear .5s, visibility 0s linear .75s;
+}
+.leaf::after{
+  content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;
+  background:linear-gradient(90deg,rgba(0,0,0,.4),rgba(0,0,0,0));
+  opacity:0;transition:opacity .75s;
+}
+.leaf[data-pos="before"]{transform:rotateY(-115deg);opacity:0;visibility:hidden;pointer-events:none}
+.leaf[data-pos="before"]::after{opacity:1}
+.leaf[data-pos="current"]{transform:none;opacity:1;visibility:visible;transition-delay:0s,0s,0s}
+.leaf[data-pos="next"]{transform:none;opacity:1;visibility:visible;pointer-events:none;transition-delay:0s,0s,0s}
+.leaf[data-pos="far"]{transform:none;opacity:0;visibility:hidden;transition:none}
+
+.sheet{
+  position:absolute;inset:0;
+  overflow-y:auto;overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+  touch-action:pan-y;
+  padding:26px 22px 30px 32px;
+  display:flex;flex-direction:column;gap:16px;
+}
+.sheet > *{flex:none;min-width:0}
+
+/* Copertina */
+.leaf.cover{background:var(--cover);color:var(--foil);border-color:var(--cover-deep);box-shadow:0 10px 26px rgba(0,0,0,.28), inset 16px 0 0 var(--cover-deep)}
+.leaf.cover::before{content:"";position:absolute;inset:16px 16px 16px 34px;border:1px solid var(--foil);opacity:.5;border-radius:4px;pointer-events:none}
+.cover .sheet{align-items:center;justify-content:center;text-align:center;gap:16px;padding:40px 30px 40px 40px;cursor:pointer}
+.cover .flower{width:92px;height:92px}
+.cover h1{font-size:clamp(36px,9vw,54px);letter-spacing:.04em;text-transform:uppercase}
+.cover .langs{opacity:.85}
 .cover .dates{font-family:var(--f-mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase}
+.cover .tap{margin-top:14px}
 
 /* Pagina dati */
-.idpage{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:20px;display:flex;flex-direction:column;gap:16px}
+.pagehead{display:flex;flex-direction:column;gap:4px}
+.pagehead .kick{color:var(--muted)}
+.pagehead h2{font-size:28px}
 .idgrid{display:grid;grid-template-columns:auto 1fr;gap:12px 18px;align-items:start}
 .photo{width:92px;height:116px;border:1px solid var(--line);background:var(--soft);display:flex;align-items:center;justify-content:center;font-family:var(--f-display);font-size:44px;color:var(--accent)}
 .fields{display:grid;gap:10px;min-width:0}
@@ -110,17 +150,15 @@ button,input{font:inherit;color:inherit}
 .mrz{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;color:var(--muted);overflow-x:auto;white-space:pre;border-top:1px dashed var(--line);padding-top:12px;line-height:1.5}
 .sign{font-family:var(--f-sign);font-size:26px;color:var(--ink);line-height:1}
 
-/* Avanzamento */
-.progress{display:flex;flex-direction:column;gap:10px}
+/* Timbri raccolti */
+.progress{display:flex;flex-direction:column;gap:10px;border-top:1px dashed var(--line);padding-top:16px}
 .slots{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
-.slot{aspect-ratio:1;border:1.5px dashed var(--line);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--stamp);background:var(--surface);max-width:76px;width:100%;margin-inline:auto}
+.slot{aspect-ratio:1;border:1.5px dashed var(--line);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--stamp);background:var(--surface);max-width:76px;width:100%;margin-inline:auto;padding:0;cursor:pointer}
 .slot .stamp{width:100%;height:100%}
 .progress .mono{color:var(--muted)}
 
 /* Tappe */
-.stages{display:flex;flex-direction:column;gap:16px}
-.stage{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:20px;display:flex;flex-direction:column;gap:16px;min-width:0}
-.stage[data-state="locked"]{border-style:dashed;background:transparent}
+.stage{display:flex;flex-direction:column;gap:16px;min-width:0}
 .stage .kick{color:var(--muted)}
 .stage h2{font-size:28px}
 .stage[data-state="locked"] h2{color:var(--muted)}
@@ -131,8 +169,10 @@ button,input{font:inherit;color:inherit}
 .thump .stamp{animation:thump .55s cubic-bezier(.2,1.4,.4,1) both}
 @keyframes thump{0%{transform:scale(2.2) rotate(-18deg);opacity:0}60%{opacity:1}100%{transform:scale(1) rotate(0);opacity:1}}
 .lock{width:34px;height:34px;color:var(--muted);flex:none}
+.lockwrap{display:flex;justify-content:center;padding-top:20px}
+.lockwrap .lock{width:64px;height:64px}
 .story{display:flex;flex-direction:column;gap:12px}
-.twist{background:var(--soft);border-left:4px solid var(--accent);padding:14px 16px;display:flex;flex-direction:column;gap:6px;border-radius:0 6px 6px 0}
+.twist{background:var(--soft);border-left:4px solid var(--accent);padding:14px 16px;display:flex;flex-direction:column;gap:8px;border-radius:0 6px 6px 0;align-items:flex-start}
 .twist .mono{color:var(--accent)}
 .fun{border:1px dashed var(--line);padding:14px 16px;border-radius:6px;display:flex;flex-direction:column;gap:6px}
 .fun .mono{color:var(--muted)}
@@ -147,6 +187,8 @@ button,input{font:inherit;color:inherit}
 .unlock input:focus{border-color:var(--accent);outline:none}
 .btn{min-height:52px;padding:10px 22px;border:0;border-radius:6px;background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:17px;cursor:pointer}
 .btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line);min-height:44px;padding:8px 16px;font-weight:600}
+.btn.foil{background:var(--foil);color:#14304B}
+.btn[disabled]{opacity:.4;cursor:default}
 .msg{min-height:1.4em;font-size:15px;color:var(--bad)}
 .shake{animation:shake .4s}
 @keyframes shake{20%{transform:translateX(-7px)}40%{transform:translateX(7px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
@@ -167,83 +209,52 @@ details.later summary{cursor:pointer;color:var(--muted);font-size:15px;min-heigh
 .explain{font-size:15px;color:var(--muted)}
 
 /* Esame finale e diploma */
-.final{background:var(--surface);border:2px solid var(--accent);border-radius:6px;padding:20px;display:flex;flex-direction:column;gap:20px}
 .final h2{font-size:30px}
-.diploma{background:var(--surface);border-radius:4px;padding:10px;outline:2px solid var(--stamp);outline-offset:-2px;box-shadow:0 0 0 6px var(--bg),0 0 0 7px var(--stamp)}
-.diploma .inner{border:1px solid var(--stamp);padding:34px 20px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center}
-.diploma h2{font-size:clamp(34px,9vw,48px);letter-spacing:.05em;text-transform:uppercase}
-.diploma .to{font-family:var(--f-display);font-size:clamp(30px,9vw,48px);color:var(--accent);line-height:1}
+.final{display:flex;flex-direction:column;gap:20px}
+.diploma{background:var(--surface);border-radius:4px;padding:10px;outline:2px solid var(--stamp);outline-offset:-2px;box-shadow:0 0 0 6px var(--surface),0 0 0 7px var(--stamp);margin:8px 6px}
+.diploma .inner{border:1px solid var(--stamp);padding:30px 16px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center}
+.diploma h2{font-size:clamp(34px,9vw,46px);letter-spacing:.05em;text-transform:uppercase}
+.diploma .to{font-family:var(--f-display);font-size:clamp(30px,9vw,44px);color:var(--accent);line-height:1}
 .diploma .rank{font-family:var(--f-display);font-size:24px}
 .diploma .score{color:var(--muted)}
-.diploma .stampbig{width:120px;height:120px;color:var(--stamp)}
 .diploma .sig{font-family:var(--f-sign);font-size:34px;line-height:1}
 
-/* Fonti e reset */
-.foot{display:flex;flex-direction:column;gap:12px;color:var(--muted);font-size:14px}
-.foot summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:600;color:var(--ink)}
-.foot ul{margin:0;padding-left:18px;display:grid;gap:6px;overflow-wrap:anywhere}
-.foot a{color:var(--accent)}
+/* Ultima pagina */
+.back ul{margin:0;padding-left:18px;display:grid;gap:6px;overflow-wrap:anywhere;font-size:14px;color:var(--muted)}
+.back a{color:var(--accent)}
+.back .note{font-size:14px;color:var(--muted)}
 .reset{align-self:flex-start}
+
+/* Barra per sfogliare */
+.nav{display:flex;align-items:center;gap:12px;width:min(100%,620px);margin-inline:auto}
+.nav .btn{min-height:48px;padding:8px 18px;min-width:112px}
+.nav .btn.ghost{min-height:48px}
+.nav .pg{flex:1;text-align:center;color:var(--muted)}
 
 @media (max-width:420px){
   body{font-size:16px}
   .photo{width:78px;height:100px}
   .stamp{width:76px;height:76px}
+  .sheet{padding:22px 16px 26px 26px}
+  .nav .btn{min-width:96px;padding-inline:12px}
 }
 @media (prefers-reduced-motion:reduce){
+  .leaf,.leaf::after{transition-duration:.01s!important;transition-delay:0s!important}
   .thump .stamp,.shake{animation:none}
 }
 </style>
-<style>[hidden]{display:none!important}html{-webkit-text-size-adjust:100%}body{margin:0}img{max-width:100%}</style>
+<style>[hidden]{display:none!important}img{max-width:100%}</style>
 </head>
 <body>
-<div class="wrap">
-
-  <header class="cover">
-    <svg class="flower" viewBox="0 0 100 100" aria-hidden="true">
-      <g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round">
-        <ellipse cx="50" cy="22" rx="8" ry="17"/>
-        <ellipse cx="50" cy="22" rx="8" ry="17" transform="rotate(60 50 50)"/>
-        <ellipse cx="50" cy="22" rx="8" ry="17" transform="rotate(120 50 50)"/>
-        <ellipse cx="50" cy="22" rx="8" ry="17" transform="rotate(180 50 50)"/>
-        <ellipse cx="50" cy="22" rx="8" ry="17" transform="rotate(240 50 50)"/>
-        <ellipse cx="50" cy="22" rx="8" ry="17" transform="rotate(300 50 50)"/>
-        <circle cx="50" cy="50" r="7" fill="currentColor"/>
-      </g>
-    </svg>
-    <h1>Passaporto</h1>
-    <div class="mono langs">Reisepass &middot; Passport &middot; Passaporto</div>
-    <div class="dates">Salisburgo &middot; 8 e 9 ottobre 2026</div>
-  </header>
-
-  <section class="idpage" aria-label="Pagina dati">
-    <div class="idgrid">
-      <div class="photo" aria-hidden="true">R</div>
-      <div class="fields">
-        <div class="field"><span class="mono">Titolare</span><div>ROBERTA STROPPARI</div></div>
-        <div class="field"><span class="mono">Qualifica</span><div>Super fan di Tutti insieme appassionatamente</div></div>
-        <div class="field"><span class="mono">Validit&agrave;</span><div>Due giorni, sei timbri</div></div>
-      </div>
-    </div>
-    <div class="field"><span class="mono">Rilasciante</span><div class="sign">i Giorgi</div></div>
-    <div class="mrz" aria-hidden="true">P&lt;SOM&lt;&lt;STROPPARI&lt;&lt;ROBERTA&lt;&lt;&lt;&lt;&lt;&lt;
-8101026SALZBURG&lt;&lt;&lt;&lt;&lt;1965&lt;&lt;&lt;&lt;&lt;&lt;</div>
-  </section>
-
-  <section class="progress" aria-live="polite">
-    <div class="slots" id="slots"></div>
-    <div class="mono" id="count"></div>
-  </section>
-
-  <main class="stages" id="stages"></main>
-
-  <section class="final" id="final" hidden></section>
-  <section id="diploma" hidden></section>
-
-  <footer class="foot">
-    <details>
-      <summary>Da dove vengono queste storie</summary>
-      <ul>
+<div class="app">
+  <div class="deck"><div class="book" id="book"></div></div>
+  <nav class="nav" aria-label="Sfoglia il passaporto">
+    <button class="btn ghost" id="prev" type="button">&lsaquo; Indietro</button>
+    <div class="mono pg" id="pg" aria-live="polite"></div>
+    <button class="btn" id="next" type="button">Avanti &rsaquo;</button>
+  </nav>
+</div>
+<template id="srcs">
         <li><a href="https://www.sound-of-music.com/worth-knowing/fun-facts-and-trivia-about-the-sound-of-music/" target="_blank" rel="noopener">sound-of-music.com, curiosit&agrave; sul film</a></li>
         <li><a href="https://www.remindmagazine.com/article/26646/sound-of-music-bts-fun-facts/" target="_blank" rel="noopener">Reminisce, storie dal set</a></li>
         <li><a href="https://www.watchmojo.com/articles/10-behind-the-scenes-stories-about-the-sound-of-music-60th-anniversary" target="_blank" rel="noopener">WatchMojo, dietro le quinte</a></li>
@@ -263,17 +274,14 @@ details.later summary{cursor:pointer;color:var(--muted);font-size:15px;min-heigh
         <li><a href="https://www.archives.gov/publications/prologue/2005/winter/von-trapps-html" target="_blank" rel="noopener">National Archives, il film e la realt&agrave;</a></li>
         <li><a href="https://www.vontrappresort.com/about-us.htm" target="_blank" rel="noopener">von Trapp Family Lodge, i dieci figli</a></li>
       </ul>
-    </details>
-    <button class="btn ghost reset" id="reset" type="button">Azzera il passaporto</button>
-  </footer>
-</div>
+</template>
 
 <script>
 (function(){
   "use strict";
 
   var STORE_KEY = "passaporto-roberta-v2";
-  var state = { open:{}, quiz:{}, fin:{} };
+  var state = { open:{}, quiz:{}, fin:{}, page:0 };
   try {
     var raw = localStorage.getItem(STORE_KEY);
     if (raw) {
@@ -282,6 +290,7 @@ details.later summary{cursor:pointer;color:var(--muted);font-size:15px;min-heigh
         state.open = p.open || {};
         state.quiz = p.quiz || {};
         state.fin = p.fin || {};
+        state.page = (typeof p.page === "number") ? p.page : 0;
       }
     }
   } catch (e) {}
@@ -425,7 +434,6 @@ details.later summary{cursor:pointer;color:var(--muted);font-size:15px;min-heigh
     { min:0.4, name:"Postulante promettente" },
     { min:0,  name:"Novizia in prova" }
   ];
-
   var justOpened = null;
   var $ = function(id){ return document.getElementById(id); };
 
@@ -467,17 +475,73 @@ details.later summary{cursor:pointer;color:var(--muted);font-size:15px;min-heigh
     return -1;
   }
 
-  function stageHTML(s, i, nxt){
+  /* Le pagine del libretto, nell'ordine in cui si sfogliano. */
+  var PAGES = [{ id:"cover" }, { id:"data" }];
+  STAGES.forEach(function(s){ PAGES.push({ id:s.id, stage:s }); });
+  PAGES.push({ id:"final" }, { id:"diploma" }, { id:"back" });
+  var TOTAL = PAGES.length;
+  var DIPLOMA_AT = TOTAL - 2;
+
+  function clampPage(n){ return Math.max(0, Math.min(TOTAL - 1, n | 0)); }
+  var cur = clampPage(state.page);
+
+  var FLOWER = '<svg class="flower" viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round">' +
+    '<ellipse cx="50" cy="22" rx="8" ry="17"/>' +
+    '<ellipse cx="50" cy="22" rx="8" ry="17" transform="rotate(60 50 50)"/>' +
+    '<ellipse cx="50" cy="22" rx="8" ry="17" transform="rotate(120 50 50)"/>' +
+    '<ellipse cx="50" cy="22" rx="8" ry="17" transform="rotate(180 50 50)"/>' +
+    '<ellipse cx="50" cy="22" rx="8" ry="17" transform="rotate(240 50 50)"/>' +
+    '<ellipse cx="50" cy="22" rx="8" ry="17" transform="rotate(300 50 50)"/>' +
+    '<circle cx="50" cy="50" r="7" fill="currentColor"/></g></svg>';
+
+  function allOpen(){ return STAGES.every(function(s){ return state.open[s.id]; }); }
+
+  function score(){
+    var n = 0;
+    STAGES.forEach(function(s){ s.quizzes.forEach(function(q, qi){ if (state.quiz[s.id + ":" + qi] === q.ok) n++; }); });
+    FINAL.forEach(function(f){ if (state.fin[f.id] === f.ok) n++; });
+    return n;
+  }
+
+  function coverHTML(){
+    return FLOWER +
+      '<h1>Passaporto</h1>' +
+      '<div class="mono langs">Reisepass &middot; Passport &middot; Passaporto</div>' +
+      '<div class="dates">Salisburgo &middot; 8 e 9 ottobre 2026</div>' +
+      '<button class="btn foil tap" type="button" data-go="1">Apri il passaporto</button>';
+  }
+
+  function dataHTML(){
+    var opened = STAGES.filter(function(s){ return state.open[s.id]; }).length;
+    var slots = STAGES.map(function(s, i){
+      return '<button class="slot" type="button" data-go="' + (i + 2) + '" aria-label="Vai alla tappa ' + s.num + '">' + (state.open[s.id] ? stampSVG(s, "stamp mini") : "") + '</button>';
+    }).join("");
+    var count = opened === 0 ? "Nessun timbro: il passaporto è ancora vuoto" :
+      opened + " di " + STAGES.length + (opened === 1 ? " timbro" : " timbri");
+    return '<div class="pagehead"><div class="mono kick">Pagina dati</div></div>' +
+      '<div class="idgrid">' +
+        '<div class="photo" aria-hidden="true">R</div>' +
+        '<div class="fields">' +
+          '<div class="field"><span class="mono">Titolare</span><div>ROBERTA STROPPARI</div></div>' +
+          '<div class="field"><span class="mono">Qualifica</span><div>Super fan di Tutti insieme appassionatamente</div></div>' +
+          '<div class="field"><span class="mono">Validit&agrave;</span><div>Due giorni, sei timbri</div></div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="field"><span class="mono">Rilasciante</span><div class="sign">i Giorgi</div></div>' +
+      '<div class="mrz" aria-hidden="true">P&lt;SOM&lt;&lt;STROPPARI&lt;&lt;ROBERTA&lt;&lt;&lt;&lt;&lt;&lt;\n8101026SALZBURG&lt;&lt;&lt;&lt;&lt;1965&lt;&lt;&lt;&lt;&lt;&lt;</div>' +
+      '<div class="progress" aria-live="polite"><div class="mono">Timbri raccolti</div><div class="slots">' + slots + '</div><div class="mono">' + count + '</div></div>';
+  }
+
+  function stagePageHTML(s, i, nxt){
     if (state.open[s.id]) {
-      var h = '<article class="stage' + (justOpened === s.id ? " thump" : "") + '" data-state="open" id="card-' + s.id + '">' +
+      return '<div class="stage' + (justOpened === s.id ? " thump" : "") + '" data-state="open">' +
         '<div class="head"><div><div class="mono kick">' + s.kicker + '</div><h2>' + s.title + '</h2></div>' + stampSVG(s) + '</div>' +
         '<div class="story">' + s.story.map(function(p){ return '<p>' + p + '</p>'; }).join("") + '</div>' +
         '<div class="twist"><div class="mono">' + s.twist.label + '</div><p>' + s.twist.text + '</p></div>' +
         (s.fun ? '<div class="fun"><div class="mono">Curiosit&agrave;</div><p>' + s.fun + '</p></div>' : '') +
         '<div class="challenge"><div class="mono">Sfida foto</div><p>' + s.challenge + '</p></div>' +
         s.quizzes.map(function(q, qi){ return quizHTML(s.id + ":" + qi, q, state.quiz[s.id + ":" + qi], "Domanda " + (qi + 1) + " di " + s.quizzes.length); }).join("") +
-        '<div class="src">' + s.src + '</div></article>';
-      return h;
+        '<div class="src">' + s.src + '</div></div>';
     }
     var form = '<form class="unlock" data-stage="' + s.id + '" autocomplete="off">' +
       '<label class="mono" style="color:var(--muted)" for="w-' + s.id + '">Parola segreta</label>' +
@@ -487,46 +551,33 @@ details.later summary{cursor:pointer;color:var(--muted);font-size:15px;min-heigh
     var body = (i === nxt)
       ? '<p>La parola segreta te la dicono i Giorgi quando arrivate. &Egrave; una parola in italiano.</p>' + form
       : '<details class="later"><summary>Ho gi&agrave; la parola</summary>' + form + '</details>';
-    return '<article class="stage" data-state="locked" id="card-' + s.id + '">' +
-      '<div class="head"><div><div class="mono kick">Tappa ' + s.num + '</div><h2>Sigillata</h2></div>' + LOCK + '</div>' + body + '</article>';
+    return '<div class="stage" data-state="locked">' +
+      '<div class="lockwrap">' + LOCK + '</div>' +
+      '<div><div class="mono kick">Tappa ' + s.num + '</div><h2>Sigillata</h2></div>' + body + '</div>';
   }
 
-  function score(){
-    var n = 0;
-    STAGES.forEach(function(s){ s.quizzes.forEach(function(q, qi){ if (state.quiz[s.id + ":" + qi] === q.ok) n++; }); });
-    FINAL.forEach(function(f){ if (state.fin[f.id] === f.ok) n++; });
-    return n;
+  function lockPage(kick, title, text){
+    return '<div class="lockwrap">' + LOCK + '</div>' +
+      '<div class="pagehead"><div class="mono kick">' + kick + '</div><h2>' + title + '</h2></div>' +
+      '<p>' + text + '</p>';
   }
 
-  function renderProgress(){
-    var opened = STAGES.filter(function(s){ return state.open[s.id]; }).length;
-    $("slots").innerHTML = STAGES.map(function(s){
-      return '<div class="slot">' + (state.open[s.id] ? stampSVG(s, "stamp mini") : "") + '</div>';
-    }).join("");
-    var c = $("count");
-    c.textContent = opened === 0 ? "Nessun timbro: il passaporto è ancora vuoto" :
-      opened + " di " + STAGES.length + (opened === 1 ? " timbro" : " timbri");
-  }
-
-  function renderFinal(){
-    var all = STAGES.every(function(s){ return state.open[s.id]; });
-    var box = $("final");
-    if (!all) { box.hidden = true; box.innerHTML = ""; return; }
-    box.hidden = false;
-    box.innerHTML = '<div><div class="mono" style="color:var(--accent)">Prova finale</div><h2>Esame da Baronessa</h2></div>' +
+  function finalHTML(){
+    if (!allOpen()) return lockPage("Prova finale", "Esame da Baronessa", "Si apre quando hai raccolto tutti e sei i timbri.");
+    var answered = FINAL.every(function(f){ return typeof state.fin[f.id] === "number"; });
+    return '<div class="final"><div><div class="mono" style="color:var(--accent)">Prova finale</div><h2>Esame da Baronessa</h2></div>' +
       '<p>Sei timbri raccolti. Ultime cinque domande. Si possono leggere ad alta voce mentre si guida: rispondi tu.</p>' +
-      FINAL.map(function(f, fi){ return quizHTML(f.id, f, state.fin[f.id], "Esame finale " + (fi + 1) + " di " + FINAL.length); }).join("");
+      FINAL.map(function(f, fi){ return quizHTML(f.id, f, state.fin[f.id], "Esame finale " + (fi + 1) + " di " + FINAL.length); }).join("") +
+      (answered ? '<div class="twist"><div class="mono">Esame finito</div><p>Il diploma ti aspetta nella pagina dopo.</p><button class="btn" type="button" data-go="' + DIPLOMA_AT + '">Vai al diploma</button></div>' : '') +
+      '</div>';
   }
 
-  function renderDiploma(){
-    var box = $("diploma");
-    var done = STAGES.every(function(s){ return state.open[s.id]; }) &&
-               FINAL.every(function(f){ return typeof state.fin[f.id] === "number"; });
-    if (!done) { box.hidden = true; box.innerHTML = ""; return; }
+  function diplomaHTML(){
+    var done = allOpen() && FINAL.every(function(f){ return typeof state.fin[f.id] === "number"; });
+    if (!done) return lockPage("Diploma", "Non ancora", "Arriva dopo l'esame finale.");
     var sc = score(), total = STAGES.reduce(function(a, s){ return a + s.quizzes.length; }, 0) + FINAL.length;
     var rank = RANKS.filter(function(r){ return sc / total >= r.min; })[0].name;
-    box.hidden = false;
-    box.innerHTML = '<div class="diploma"><div class="inner">' +
+    return '<div class="diploma"><div class="inner">' +
       '<div class="mono" style="color:var(--stamp)">Salisburgo &middot; Mondsee &middot; 8 e 9 ottobre 2026</div>' +
       '<h2>Diploma</h2>' +
       '<p>si conferisce a</p>' +
@@ -538,22 +589,93 @@ details.later summary{cursor:pointer;color:var(--muted);font-size:15px;min-heigh
       '</div></div>';
   }
 
+  function backHTML(){
+    var tpl = document.getElementById("srcs");
+    return '<div class="back" style="display:flex;flex-direction:column;gap:16px">' +
+      '<div class="pagehead"><div class="mono kick">Ultima pagina</div><h2>Da dove vengono queste storie</h2></div>' +
+      (tpl ? tpl.innerHTML : "") +
+      '<p class="note">I progressi restano salvati su questo dispositivo.</p>' +
+      '<button class="btn ghost reset" id="reset" type="button">Azzera il passaporto</button></div>';
+  }
+
+  function pageHTML(p){
+    if (p.id === "cover") return coverHTML();
+    if (p.id === "data") return dataHTML();
+    if (p.id === "final") return finalHTML();
+    if (p.id === "diploma") return diplomaHTML();
+    if (p.id === "back") return backHTML();
+    return stagePageHTML(p.stage, STAGES.indexOf(p.stage), nextIndex());
+  }
+
+  function label(i){
+    var p = PAGES[i];
+    if (p.id === "cover") return "Copertina";
+    if (p.id === "data") return "Pagina dati";
+    if (p.stage) return "Tappa " + p.stage.num + " di " + STAGES.length;
+    if (p.id === "final") return "Esame finale";
+    if (p.id === "diploma") return "Diploma";
+    return "Ultima pagina";
+  }
+
+  var book = $("book");
+  PAGES.forEach(function(p, i){
+    var el = document.createElement("section");
+    el.className = "leaf" + (i === 0 ? " cover" : "");
+    el.style.zIndex = String(TOTAL - i);
+    el.setAttribute("aria-label", label(i));
+    var sheet = document.createElement("div");
+    sheet.className = "sheet";
+    el.appendChild(sheet);
+    book.appendChild(el);
+    p.el = el;
+    p.sheet = sheet;
+  });
+
   function renderAll(){
-    var nxt = nextIndex();
-    $("stages").innerHTML = STAGES.map(function(s, i){ return stageHTML(s, i, nxt); }).join("");
-    renderProgress();
-    renderFinal();
-    renderDiploma();
+    PAGES.forEach(function(p){
+      var top = p.sheet.scrollTop;
+      p.sheet.innerHTML = pageHTML(p);
+      p.sheet.scrollTop = top;
+    });
+    updateNav();
   }
 
-  function keepScroll(fn){
-    var y = window.scrollY;
-    fn();
-    window.scrollTo(0, y);
+  function setPos(){
+    PAGES.forEach(function(p, i){
+      var pos = i < cur ? "before" : (i === cur ? "current" : (i === cur + 1 ? "next" : "far"));
+      p.el.setAttribute("data-pos", pos);
+      if (i === cur) { p.el.removeAttribute("inert"); p.el.removeAttribute("aria-hidden"); }
+      else { p.el.setAttribute("inert", ""); p.el.setAttribute("aria-hidden", "true"); }
+    });
   }
 
-  function reduced(){
-    try { return window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) { return false; }
+  function updateNav(){
+    $("pg").textContent = label(cur);
+    $("prev").disabled = (cur === 0);
+    $("next").disabled = (cur === TOTAL - 1);
+    $("next").innerHTML = (cur === 0 ? "Apri" : "Avanti") + " &rsaquo;";
+  }
+
+  function go(n){
+    n = clampPage(n);
+    if (n === cur) return;
+    cur = n;
+    state.page = cur;
+    save();
+    PAGES[cur].sheet.scrollTop = 0;
+    setPos();
+    updateNav();
+  }
+
+  function jump(n){
+    book.classList.add("noanim");
+    cur = clampPage(n);
+    state.page = cur;
+    save();
+    setPos();
+    updateNav();
+    void book.offsetWidth;
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ book.classList.remove("noanim"); }); });
   }
 
   document.addEventListener("submit", function(ev){
@@ -571,8 +693,8 @@ details.later summary{cursor:pointer;color:var(--muted);font-size:15px;min-heigh
       save();
       justOpened = s.id;
       renderAll();
-      var card = $("card-" + s.id);
-      if (card) card.scrollIntoView({ behavior: reduced() ? "auto" : "smooth", block: "start" });
+      PAGES[cur].sheet.scrollTop = 0;
+      if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
     } else {
       msg.textContent = typed ? "Non è la parola giusta. Ascolta bene." : "Scrivi la parola che ti hanno detto.";
       input.classList.remove("shake");
@@ -583,26 +705,31 @@ details.later summary{cursor:pointer;color:var(--muted);font-size:15px;min-heigh
   });
 
   document.addEventListener("click", function(ev){
-    var t = ev.target.closest ? ev.target.closest("button") : null;
+    var tgt = ev.target;
+    if (cur === 0 && tgt.closest && tgt.closest(".leaf.cover") && !tgt.closest("button")) { go(1); return; }
+    var t = tgt.closest ? tgt.closest("button") : null;
     if (!t) return;
+    if (t.id === "prev") { go(cur - 1); return; }
+    if (t.id === "next") { go(cur + 1); return; }
+    var dest = t.getAttribute("data-go");
+    if (dest !== null) { go(parseInt(dest, 10)); return; }
     var key = t.getAttribute("data-quiz");
     if (key) {
       var i = parseInt(t.getAttribute("data-i"), 10);
       if (key.charAt(0) === "f") state.fin[key] = i; else state.quiz[key] = i;
       save();
       justOpened = null;
-      keepScroll(renderAll);
+      renderAll();
       return;
     }
     if (t.id === "reset") {
       if (t.getAttribute("data-armed") === "1") {
-        state = { open:{}, quiz:{}, fin:{} };
+        state = { open:{}, quiz:{}, fin:{}, page:0 };
         save();
         justOpened = null;
-        t.removeAttribute("data-armed");
-        t.textContent = "Azzera il passaporto";
         renderAll();
-        window.scrollTo(0, 0);
+        PAGES.forEach(function(p){ p.sheet.scrollTop = 0; });
+        jump(0);
       } else {
         t.setAttribute("data-armed", "1");
         t.textContent = "Tocca di nuovo per cancellare tutto";
@@ -614,7 +741,32 @@ details.later summary{cursor:pointer;color:var(--muted);font-size:15px;min-heigh
     }
   });
 
+  /* Sfoglia con un colpo di dito verso sinistra o destra. */
+  var tx = null, ty = null;
+  book.addEventListener("touchstart", function(ev){
+    if (ev.touches.length !== 1) { tx = null; return; }
+    tx = ev.touches[0].clientX;
+    ty = ev.touches[0].clientY;
+  }, { passive:true });
+  book.addEventListener("touchend", function(ev){
+    if (tx === null) return;
+    var t = ev.changedTouches[0];
+    var dx = t.clientX - tx, dy = t.clientY - ty;
+    var onScroller = ev.target.closest && ev.target.closest(".mrz, input");
+    tx = null;
+    if (onScroller) return;
+    if (Math.abs(dx) > 70 && Math.abs(dx) > 1.6 * Math.abs(dy)) go(dx < 0 ? cur + 1 : cur - 1);
+  }, { passive:true });
+
+  document.addEventListener("keydown", function(ev){
+    var a = document.activeElement;
+    if (a && (a.tagName === "INPUT" || a.tagName === "TEXTAREA")) return;
+    if (ev.key === "ArrowRight") go(cur + 1);
+    else if (ev.key === "ArrowLeft") go(cur - 1);
+  });
+
   renderAll();
+  jump(cur);
 })();
 </script>
 
